@@ -615,11 +615,114 @@ function App() {
         </div>
       </section>
 
-      {/* Footer (Simple Placeholder) */}
-      <footer className="py-12 bg-gray-900 text-white text-center">
-        <div className="container mx-auto px-6">
-          <img src="https://i.ibb.co/vzNf5k0/petflix-logo.png" alt="Petflix" className="h-10 mx-auto mb-6 brightness-0 invert opacity-50" />
-          <p className="text-gray-500 text-sm">© 2024 Petflix Junction. All rights reserved.</p>
+      {/* Map Section */}
+      <section className="h-[500px] relative w-full overflow-hidden" id="map">
+        <iframe 
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d14876.840798604313!2d85.60275583626288!3d21.183756317789396!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a19391694f29135%3A0xb3bc28889c19d453!2sKeonjhar%2C%20Odisha!5e0!3m2!1sen!2sin!4v1710355412431!5m2!1sen!2sin" 
+          className="w-full h-full grayscale-[0.2] contrast-[1.1]" 
+          style={{ border: 0 }} 
+          allowFullScreen={true} 
+          loading="lazy" 
+          referrerPolicy="no-referrer-when-downgrade"
+        ></iframe>
+        
+        {/* Map Overlay Box */}
+        <div className="absolute top-10 left-10 bg-white p-6 rounded-2xl shadow-2xl max-w-[300px] border border-gray-100 hidden md:block">
+          <h4 className="font-bold text-gray-800 text-lg mb-2">Petflix Junction</h4>
+          <p className="text-gray-500 text-xs mb-3 leading-relaxed">JJFC+PQ, Keonjhar, Odisha 758014</p>
+          <div className="flex items-center gap-1 mb-4">
+            <span className="text-sm font-bold text-gray-800">5.0</span>
+            <div className="flex text-yellow-400">
+              <Star size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
+              <Star size={14} fill="currentColor" />
+            </div>
+            <span className="text-xs text-gray-400 font-medium">(5)</span>
+          </div>
+          <div className="flex gap-2">
+            <a href="#" className="flex-1 bg-primary text-white text-xs font-bold py-2 rounded-lg text-center hover:bg-primary-hover transition-colors">Directions</a>
+            <a href="#" className="flex-1 border border-primary text-primary text-xs font-bold py-2 rounded-lg text-center hover:bg-primary hover:text-white transition-all">View larger map</a>
+          </div>
+        </div>
+      </section>
+
+      {/* High-Fidelity Footer */}
+      <footer className="bg-[#0c0d10] text-[#a0a0a0] pt-24 pb-12 overflow-hidden relative" id="footer">
+        {/* Subtle Background Glow */}
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-primary/10 rounded-full blur-[150px] -translate-y-1/2 pointer-events-none"></div>
+        
+        <div className="container mx-auto px-6 relative z-10">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+            {/* About Column */}
+            <div className="space-y-8">
+              <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl w-fit">
+                <img src="https://i.ibb.co/vzNf5k0/petflix-logo.png" alt="Petflix" className="h-10" />
+              </div>
+              <div>
+                <h4 className="text-white text-lg font-bold mb-6 relative w-fit after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-1 after:bg-primary italic">About Us</h4>
+                <p className="leading-[1.8] text-[16px]">
+                  Grooming can sometimes be stressful for both pets and their owners – but that's where we come in! At Petflix Junction, we ensure a calm, caring, and comfortable grooming experience every time. "Because your furry friend deserves nothing but the best —"
+                </p>
+              </div>
+            </div>
+
+            {/* Services Column */}
+            <div>
+              <h4 className="text-white text-lg font-bold mb-8 relative w-fit after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-1 after:bg-primary italic">Our Services</h4>
+              <ul className="space-y-4">
+                {['Pet Grooming', 'Pet Taxi', 'Dog Training', 'Dog Walking', 'Pet Boarding'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="hover:text-primary transition-all duration-300 flex items-center group">
+                      <span className="w-0 group-hover:w-4 overflow-hidden transition-all duration-300 text-primary">→</span>
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Links Column */}
+            <div>
+              <h4 className="text-white text-lg font-bold mb-8 relative w-fit after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-1 after:bg-primary italic">About Links</h4>
+              <ul className="space-y-4">
+                {['Home', 'About Us', 'Services', 'Gallery', 'Contact Us'].map((item) => (
+                  <li key={item}>
+                    <a href="#" className="hover:text-primary transition-all duration-300 flex items-center group">
+                      <span className="w-0 group-hover:w-4 overflow-hidden transition-all duration-300 text-primary">→</span>
+                      {item}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Newsletter Column */}
+            <div>
+              <h4 className="text-white text-lg font-bold mb-8 relative w-fit after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-1 after:bg-primary italic">Newsletter</h4>
+              <p className="mb-6 leading-relaxed">Subscribe to get latest updates and offers.</p>
+              <div className="space-y-3">
+                <input 
+                  type="email" 
+                  placeholder="Your Email" 
+                  className="w-full bg-[#1a1b1e] border-none rounded-xl p-5 text-white focus:ring-2 focus:ring-primary/50 outline-none placeholder:text-gray-600 transition-all font-medium" 
+                />
+                <button className="w-full bg-primary text-white font-bold py-5 rounded-xl hover:bg-primary-hover transition-all duration-300 shadow-lg shadow-primary/20 active:scale-[0.98]">
+                  Subscribe
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Bar */}
+          <div className="pt-12 border-t border-gray-800/50 flex flex-col md:flex-row justify-between items-center gap-6">
+            <p className="text-sm font-medium tracking-wide">© 2024 Petflix Junction. All rights reserved.</p>
+            <div className="flex gap-8 text-sm font-medium">
+              <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
+              <a href="#" className="hover:text-primary transition-colors">Terms of Service</a>
+            </div>
+          </div>
         </div>
       </footer>
     </div>
