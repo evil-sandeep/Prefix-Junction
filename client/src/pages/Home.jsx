@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { ShoppingCart, Mail, Phone, Clock, ShieldCheck, Activity, Heart, Headset, Stethoscope, Scissors, Utensils, Star, MapPin } from 'lucide-react';
 
 function Home() {
@@ -34,7 +35,7 @@ function Home() {
       <header className="bg-white py-4 sticky top-0 z-[100] shadow-sm">
         <div className="container mx-auto px-6 flex justify-between items-center">
           {/* Logo */}
-          <div className="flex flex-col items-center">
+          <Link to="/" className="flex flex-col items-center">
             <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-1">
               <path d="M50 85C50 85 20 60 20 40C20 25 35 15 50 30C65 15 80 25 80 40C80 60 50 85 50 85Z" stroke="#ff6b6b" strokeWidth="4" fill="transparent"/>
               <path d="M40 45C40 45 45 55 50 55C55 55 60 45 60 45" stroke="#ff6b6b" strokeWidth="4" strokeLinecap="round"/>
@@ -42,19 +43,16 @@ function Home() {
               <circle cx="65" cy="35" r="4" fill="#ff6b6b"/>
             </svg>
             <span className="text-[11px] font-bold tracking-[2px] text-[#ff6b6b]">PETFLIX JUNCTION</span>
-          </div>
+          </Link>
 
           {/* Navigation */}
           <nav className="hidden lg:flex items-center gap-8">
-            {['HOME', 'SERVICES', 'OUR PRODUCTS', 'BOOKING', 'PRICING', 'ABOUT US'].map((item) => (
-              <a 
-                key={item} 
-                href={`#${item.toLowerCase().replace(' ', '-')}`} 
-                className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide"
-              >
-                {item}
-              </a>
-            ))}
+            <Link to="/" className="text-sm font-semibold text-primary transition-colors tracking-wide">HOME</Link>
+            <Link to="/services" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">SERVICES</Link>
+            <a href="/#our-products" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">OUR PRODUCTS</a>
+            <Link to="/booking" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">BOOKING</Link>
+            <a href="/#pricing" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">PRICING</a>
+            <Link to="/about" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">ABOUT US</Link>
           </nav>
 
           {/* Actions */}
@@ -62,9 +60,9 @@ function Home() {
             <button className="w-10 h-10 rounded-full border border-gray-100 flex items-center justify-center text-gray-700 hover:border-primary hover:text-primary transition-all bg-gray-50/50">
               <ShoppingCart size={20} />
             </button>
-            <button className="bg-[#00d084] hover:bg-[#00b875] text-white px-7 py-2.5 rounded-full text-sm font-bold tracking-wider transition-all shadow-md hover:shadow-lg active:scale-95">
+            <Link to="/booking" className="bg-[#00d084] hover:bg-[#00b875] text-white px-7 py-2.5 rounded-full text-sm font-bold tracking-wider transition-all shadow-md hover:shadow-lg active:scale-95">
               BOOK NOW
-            </button>
+            </Link>
           </div>
         </div>
       </header>
@@ -88,9 +86,9 @@ function Home() {
             <p className="text-lg mb-10 opacity-80 leading-relaxed font-light">
               We bring professional grooming services to your doorstep. No more stressful car rides for your pet!
             </p>
-            <button className="bg-primary hover:bg-primary-hover text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-[0_10px_30px_rgba(11,213,115,0.3)] hover:-translate-y-1">
+            <Link to="/booking" className="bg-primary hover:bg-primary-hover text-white px-10 py-4 rounded-full text-lg font-bold transition-all shadow-[0_10px_30px_rgba(11,213,115,0.3)] hover:-translate-y-1">
               Book Appointment
-            </button>
+            </Link>
           </div>
         </div>
 
@@ -109,127 +107,38 @@ function Home() {
       {/* About Us & Booking Section */}
       <section className="py-24 bg-white" id="booking">
         <div className="container mx-auto px-6">
-          <div className="flex flex-col lg:flex-row gap-20 items-start">
+          <div className="flex flex-col lg:flex-row gap-20 items-center">
             
-            {/* Booking Form Card */}
-            <div className="w-full lg:w-[450px] bg-white rounded-[24px] shadow-[0_20px_60px_rgba(0,0,0,0.06)] p-12 border border-gray-50">
-              <h2 className="text-[32px] font-bold text-primary mb-10 tracking-tight">Book Your slot</h2>
-              <form className="space-y-6">
-                <div>
-                  <input 
-                    type="text" 
-                    placeholder="Your Name" 
-                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700"
-                  />
-                </div>
-                <div>
-                  <input 
-                    type="email" 
-                    placeholder="Email Address" 
-                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700"
-                  />
-                </div>
-                <div>
-                  <input 
-                    type="tel" 
-                    placeholder="Phone Number" 
-                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700"
-                  />
-                </div>
-                <div className="relative group">
-                  <select className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 appearance-none cursor-pointer">
-                    <option>Select A Service</option>
-                    <option>Teeth Brushing</option>
-                    <option>Ear Cleaning</option>
-                    <option>Deshedding / Dematting</option>
-                    <option>Shampoo & Blow Drying</option>
-                    <option>Hygiene Cut</option>
-                    <option>Zero Hair Cut / Trimming</option>
-                    <option>Tick & Flea Treatment</option>
-                    <option>Cat Zero Hair Cut with Nail Cut</option>
-                    <option>Dog Boarding 24 Hours</option>
-                    <option>Cat Boarding</option>
-                    <option>Dog Day Care</option>
-                    <option>Swimming + Shampoo Bath</option>
-                    <option>Normal Bath Pack</option>
-                    <option>Full Grooming Bath Pack</option>
-                    <option>Advance Full Grooming Bath Pack</option>
-                    <option>Full Grooming Medicated Bath Pack</option>
-                    <option>Pet Resort Pack</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  </div>
-                </div>
-                <div className="relative">
-                  <input 
-                    type="date" 
-                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 uppercase text-xs font-bold tracking-widest"
-                  />
-                </div>
-                <div className="relative group">
-                  <select className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 appearance-none cursor-pointer">
-                    <option>Select a slot</option>
-                    <option>Morning (9 AM - 12 PM)</option>
-                    <option>Afternoon (1 PM - 4 PM)</option>
-                    <option>Evening (5 PM - 8 PM)</option>
-                  </select>
-                  <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-                  </div>
-                </div>
-                <button 
-                  type="submit" 
-                  className="w-full bg-[#00d084] hover:bg-[#00b875] text-white font-bold py-5 rounded-xl transition-all shadow-[0_15px_30px_rgba(0,208,132,0.25)] hover:shadow-[0_20px_40px_rgba(0,208,132,0.3)] hover:-translate-y-1 active:translate-y-0"
-                >
-                  Book Now
-                </button>
-              </form>
+            {/* Booking Call to Action */}
+            <div className="w-full lg:w-[450px] bg-primary rounded-[24px] shadow-[0_20px_60px_rgba(11,213,115,0.15)] p-12 text-white flex flex-col items-center text-center">
+              <div className="w-16 h-16 rounded-full bg-white/20 flex items-center justify-center mb-6 backdrop-blur-md">
+                <Clock size={32} />
+              </div>
+              <h2 className="text-[32px] font-bold mb-6 tracking-tight">Ready to book?</h2>
+              <p className="mb-10 opacity-90 text-lg leading-relaxed">
+                Experience the best pet grooming services at your doorstep. Secure your slot today!
+              </p>
+              <Link 
+                to="/booking" 
+                className="w-full bg-white text-primary font-bold py-5 rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 active:translate-y-0"
+              >
+                Go to Booking Page
+              </Link>
             </div>
 
-            {/* About Us Content */}
-            <div className="flex-1 lg:pt-6">
+            {/* About Us Call to Action */}
+            <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
               <h2 className="text-[38px] font-bold text-primary mb-2 leading-none uppercase tracking-tight">About Us</h2>
-              <h3 className="text-[30px] font-bold text-gray-900 mb-10 leading-tight">Petflix Grooming Services</h3>
-              
-              <div className="space-y-8 text-[18px] text-gray-500 leading-relaxed font-normal">
-                <p>
-                  Founded on November 10, 2025, Petflix Junction – Pet Grooming Services has 
-                  quickly established itself as a trusted and comprehensive pet care provider in 
-                  Kendujhar. Our mission is to deliver top-quality grooming and wellness services 
-                  that ensure every pet looks, feels, and lives their best.
-                </p>
-                <p>
-                  We proudly offer doorstep grooming services across Kendujhar, along with a 
-                  state-of-the-art Pet Grooming Salon located at Mandua, near Saras Road, 
-                  Kendujhar. In addition to grooming, we regularly organize pet vaccination camps, 
-                  and provide a wide range of pet essentials including premium pet food, grooming 
-                  accessories, toys, and treats — all available online.
-                </p>
-                <p>
-                  Very soon, our offline store and full-service pet care center will also be launched 
-                  to serve you even better. For now, all our services are conveniently available 
-                  online, ensuring your pets receive care at your doorstep with just a click!
-                </p>
-              </div>
-
-              {/* Checklist */}
-              <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-y-7 gap-x-12">
-                {[
-                  "Expert Groomers", "Quality Products", 
-                  "Affordable Prices", "Home Service", 
-                  "Safe & Hygienic", "Pet Friendly"
-                ].map((item, index) => (
-                  <div key={index} className="flex items-center gap-5 group">
-                    <div className="w-7 h-7 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </div>
-                    <span className="font-bold text-[20px] text-gray-800 tracking-tight">{item}</span>
-                  </div>
-                ))}
-              </div>
+              <h3 className="text-[30px] font-bold text-gray-900 mb-8 leading-tight">Petflix Grooming Services</h3>
+              <p className="text-lg text-gray-500 mb-10 leading-relaxed font-light">
+                Discover our journey of bringing professional pet care to your doorstep. We are committed to the health and happiness of your furry friends.
+              </p>
+              <Link 
+                to="/about" 
+                className="bg-[#00d084] hover:bg-[#00b875] text-white font-bold px-10 py-5 rounded-xl transition-all shadow-[0_15px_30px_rgba(0,208,132,0.25)] hover:shadow-[0_20px_40px_rgba(0,208,132,0.3)] hover:-translate-y-1 active:translate-y-0"
+              >
+                Learn More About Us
+              </Link>
             </div>
 
           </div>
@@ -239,7 +148,9 @@ function Home() {
       <section className="py-24 bg-[#f8f9fa] overflow-hidden" id="why-us">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h2 className="text-[36px] font-bold text-blue-600 mb-2 uppercase tracking-tight">Why Choose Us?</h2>
+            <Link to="/why-choose-us" className="inline-block">
+              <h2 className="text-[36px] font-bold text-blue-600 mb-2 uppercase tracking-tight hover:text-primary transition-colors">Why Choose Us?</h2>
+            </Link>
           </div>
           
           <div className="flex flex-col lg:flex-row gap-16 items-center">
@@ -319,7 +230,9 @@ function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
             <h4 className="text-gray-500 font-medium text-lg mb-2">Our Services</h4>
-            <h2 className="text-[42px] font-bold text-primary">Premium Pet Services</h2>
+            <Link to="/our-services" className="inline-block">
+              <h2 className="text-[42px] font-bold text-primary hover:text-[#00b875] transition-colors">Premium Pet Services</h2>
+            </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -329,7 +242,7 @@ function Home() {
                 <Stethoscope size={40} strokeWidth={1.5} />
               </div>
               <h3 className="text-[24px] font-bold text-gray-800 mb-8">Petflix Doctor</h3>
-              <a href="#" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</a>
+              <Link to="/services" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</Link>
             </div>
 
             {/* Petflix Grooming Card */}
@@ -338,7 +251,7 @@ function Home() {
                 <Scissors size={40} strokeWidth={1.5} />
               </div>
               <h3 className="text-[24px] font-bold text-gray-800 mb-8">Petflix Grooming Service</h3>
-              <a href="#" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</a>
+              <Link to="/services" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</Link>
             </div>
 
             {/* Petflix Food Card */}
@@ -347,7 +260,7 @@ function Home() {
                 <Utensils size={40} strokeWidth={1.5} />
               </div>
               <h3 className="text-[24px] font-bold text-gray-800 mb-8">Petflix Food Service</h3>
-              <a href="#" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</a>
+              <Link to="/services" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</Link>
             </div>
           </div>
         </div>
@@ -357,7 +270,9 @@ function Home() {
         <div className="container mx-auto px-6">
           <div className="text-center mb-20">
             <h4 className="text-gray-400 font-medium text-lg mb-2">Caring Beyond Grooming</h4>
-            <h2 className="text-[46px] font-bold text-primary">Simply the best for your pet</h2>
+            <Link to="/holistic-care" className="inline-block">
+              <h2 className="text-[46px] font-bold text-primary hover:text-[#00b875] transition-colors">Simply the best for your pet</h2>
+            </Link>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
@@ -481,36 +396,26 @@ function Home() {
         </div>
       </section>
 
-      {/* Meet Our Team Section */}
-      <section className="py-24 bg-white" id="team">
+      {/* Featured Statistics (Replaces Team on Home) */}
+      <section className="py-24 bg-primary text-white overflow-hidden">
         <div className="container mx-auto px-6">
-          <div className="text-center mb-16">
-            <h4 className="text-gray-400 font-medium text-lg mb-2">Team Member</h4>
-            <h2 className="text-[46px] font-bold text-primary">Meet Our Team</h2>
-          </div>
-          
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-            {[
-              { name: "Sandeep Sahu", role: "CEO & Founder", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop" },
-              { name: "Priya Sharma", role: "Expert Groomer", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" },
-              { name: "Rahul Das", role: "Pet Stylist", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop" },
-              { name: "Ananya Ray", role: "Customer Care", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop" }
-            ].map((member, idx) => (
-              <div key={idx} className="group">
-                <div className="relative overflow-hidden rounded-[30px] mb-6 shadow-md aspect-[4/5]">
-                  <img 
-                    src={member.img} 
-                    alt={member.name} 
-                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                </div>
-                <div className="text-center">
-                  <h3 className="text-[22px] font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">{member.name}</h3>
-                  <p className="text-gray-500 font-medium uppercase text-xs tracking-[2px]">{member.role}</p>
-                </div>
-              </div>
-            ))}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 text-center">
+            <div>
+               <div className="text-5xl font-bold mb-2 uppercase">500+</div>
+               <div className="text-white/80 text-sm uppercase tracking-widest font-bold">Happy Pets</div>
+            </div>
+            <div>
+               <div className="text-5xl font-bold mb-2 uppercase">10+</div>
+               <div className="text-white/80 text-sm uppercase tracking-widest font-bold">Expert Groomers</div>
+            </div>
+            <div>
+               <div className="text-5xl font-bold mb-2 uppercase">24/7</div>
+               <div className="text-white/80 text-sm uppercase tracking-widest font-bold">Premium Care</div>
+            </div>
+            <div>
+               <div className="text-5xl font-bold mb-2 uppercase">100%</div>
+               <div className="text-white/80 text-sm uppercase tracking-widest font-bold">Safety Rate</div>
+            </div>
           </div>
         </div>
       </section>

@@ -1,12 +1,25 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home';
+import Services from './pages/Services';
+import BookYourSlot from './pages/BookYourSlot';
+import AboutUs from './pages/AboutUs';
+import WhyChooseUs from './pages/WhyChooseUs';
+import OurServices from './pages/OurServices';
+import HolisticCare from './pages/HolisticCare';
 
 function App() {
+  console.log('App is rendering');
   return (
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/services" element={<Services />} />
+        <Route path="/booking" element={<BookYourSlot />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/why-choose-us" element={<WhyChooseUs />} />
+        <Route path="/our-services" element={<OurServices />} />
+        <Route path="/holistic-care" element={<HolisticCare />} />
       </Routes>
     </Router>
   );
