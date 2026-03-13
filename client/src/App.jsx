@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShoppingCart, Mail, Phone, Clock, ShieldCheck, Activity, Heart, Headset } from 'lucide-react';
+import { ShoppingCart, Mail, Phone, Clock, ShieldCheck, Activity, Heart, Headset, Stethoscope, Scissors, Utensils } from 'lucide-react';
 
 function App() {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -296,6 +296,100 @@ function App() {
                   <span className="text-[20px] font-bold text-gray-900">Customer Support</span>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Our Services Section */}
+      <section className="py-24 bg-white" id="services">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h4 className="text-gray-500 font-medium text-lg mb-2">Our Services</h4>
+            <h2 className="text-[42px] font-bold text-primary">Premium Pet Services</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Petflix Doctor Card */}
+            <div className="bg-white rounded-[30px] p-12 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:-translate-y-2 border border-blue-50/50 flex flex-col items-center group text-center shadow-sm">
+              <div className="w-20 h-20 rounded-2xl bg-blue-50 flex items-center justify-center text-blue-600 mb-8 group-hover:bg-blue-600 group-hover:text-white transition-all duration-300">
+                <Stethoscope size={40} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-[24px] font-bold text-gray-800 mb-8">Petflix Doctor</h3>
+              <a href="#" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</a>
+            </div>
+
+            {/* Petflix Grooming Card */}
+            <div className="bg-white rounded-[30px] p-12 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:-translate-y-2 border border-red-50/50 flex flex-col items-center group text-center shadow-sm">
+              <div className="w-20 h-20 rounded-2xl bg-red-50 flex items-center justify-center text-[#ff6b6b] mb-8 group-hover:bg-[#ff6b6b] group-hover:text-white transition-all duration-300">
+                <Scissors size={40} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-[24px] font-bold text-gray-800 mb-8">Petflix Grooming Service</h3>
+              <a href="#" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</a>
+            </div>
+
+            {/* Petflix Food Card */}
+            <div className="bg-white rounded-[30px] p-12 transition-all duration-300 hover:shadow-[0_20px_60px_rgba(0,0,0,0.08)] hover:-translate-y-2 border border-purple-50/50 flex flex-col items-center group text-center shadow-sm">
+              <div className="w-20 h-20 rounded-2xl bg-purple-50 flex items-center justify-center text-purple-600 mb-8 group-hover:bg-purple-600 group-hover:text-white transition-all duration-300">
+                <Utensils size={40} strokeWidth={1.5} />
+              </div>
+              <h3 className="text-[24px] font-bold text-gray-800 mb-8">Petflix Food Service</h3>
+              <a href="#" className="text-primary font-bold text-[18px] hover:underline transition-all">More Info</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      {/* Holistic Care Section */}
+      <section className="py-24 bg-[#fffaf5]" id="holistic-care">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-20">
+            <h4 className="text-gray-400 font-medium text-lg mb-2">Caring Beyond Grooming</h4>
+            <h2 className="text-[46px] font-bold text-primary">Simply the best for your pet</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
+            {/* Curated by Vets Card */}
+            <div className="bg-white rounded-[40px] p-12 transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)] flex flex-col items-center text-center shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-white">
+              <div className="w-[200px] h-[200px] rounded-full overflow-hidden mb-10 border-8 border-[#fef7f0] shadow-inner">
+                <img 
+                  src="https://images.unsplash.com/photo-1581578731548-c64695cc6958?q=80&w=2070&auto=format&fit=crop" 
+                  alt="Curated by Vets" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-[26px] font-bold text-gray-900 mb-6">Curated by Vets</h3>
+              <p className="text-gray-500 text-[17px] leading-relaxed">
+                Resident veterinarians validate every tool, product, and comfort ritual so treatments stay clinically safe and pet approved.
+              </p>
+            </div>
+
+            {/* Clean & Transparent Card */}
+            <div className="bg-white rounded-[40px] p-12 transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)] flex flex-col items-center text-center shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-white">
+              <div className="w-[200px] h-[200px] rounded-full overflow-hidden mb-10 border-8 border-[#fef7f0] shadow-inner">
+                <img 
+                  src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop" 
+                  alt="Clean & Transparent" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-[26px] font-bold text-gray-900 mb-6">Clean & Transparent</h3>
+              <p className="text-gray-500 text-[17px] leading-relaxed">
+                Sanitized tools, clean ingredients, and real-time updates mean you always know exactly what touches your companion.
+              </p>
+            </div>
+
+            {/* Holistic Care Card */}
+            <div className="bg-white rounded-[40px] p-12 transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)] flex flex-col items-center text-center shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-white">
+              <div className="w-[200px] h-[200px] rounded-full overflow-hidden mb-10 border-8 border-[#fef7f0] shadow-inner">
+                <img 
+                  src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop" 
+                  alt="Holistic Care" 
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <h3 className="text-[26px] font-bold text-gray-900 mb-6">Holistic Care</h3>
+              <p className="text-gray-500 text-[17px] leading-relaxed">
+                We nurture the emotional, physical, and social needs of every pet with calming techniques and post-care coaching.
+              </p>
             </div>
           </div>
         </div>
