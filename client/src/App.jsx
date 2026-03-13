@@ -422,6 +422,84 @@ function App() {
           </div>
         </div>
       </section>
+      {/* Before & After Section */}
+      <section className="py-24 bg-[#f8f9fa]" id="before-after">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-[42px] font-bold text-primary italic">Before & After</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { 
+                title: "Full Grooming Package", 
+                before: "https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?q=80&w=1887&auto=format&fit=crop", 
+                after: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=2071&auto=format&fit=crop" 
+              },
+              { 
+                title: "Spa Treatment", 
+                before: "https://images.unsplash.com/photo-1534361960057-19889db9621e?q=80&w=2070&auto=format&fit=crop", 
+                after: "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=2068&auto=format&fit=crop" 
+              },
+              { 
+                title: "Haircut & Style", 
+                before: "https://images.unsplash.com/photo-1591768793355-74d7cab35171?q=80&w=2070&auto=format&fit=crop", 
+                after: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=2043&auto=format&fit=crop" 
+              }
+            ].map((item, idx) => (
+              <div key={idx} className="bg-white rounded-[24px] overflow-hidden shadow-lg border border-white hover:shadow-2xl transition-all duration-300">
+                <div className="flex h-[250px]">
+                  <div className="w-1/2 relative overflow-hidden group">
+                    <img src={item.before} alt="Before" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    <div className="absolute top-4 left-4 bg-black/50 text-white text-[10px] px-3 py-1 rounded-full uppercase font-bold tracking-widest backdrop-blur-sm">Before</div>
+                  </div>
+                  <div className="w-1/2 relative overflow-hidden group">
+                    <img src={item.after} alt="After" className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                    <div className="absolute top-4 right-4 bg-primary/80 text-white text-[10px] px-3 py-1 rounded-full uppercase font-bold tracking-widest backdrop-blur-sm">After</div>
+                  </div>
+                </div>
+                <div className="py-5 text-center bg-white">
+                  <span className="text-[17px] font-bold text-gray-800 tracking-tight">{item.title}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Meet Our Team Section */}
+      <section className="py-24 bg-white" id="team">
+        <div className="container mx-auto px-6">
+          <div className="text-center mb-16">
+            <h4 className="text-gray-400 font-medium text-lg mb-2">Team Member</h4>
+            <h2 className="text-[46px] font-bold text-primary">Meet Our Team</h2>
+          </div>
+          
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            {[
+              { name: "Sandeep Sahu", role: "CEO & Founder", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop" },
+              { name: "Priya Sharma", role: "Expert Groomer", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" },
+              { name: "Rahul Das", role: "Pet Stylist", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop" },
+              { name: "Ananya Ray", role: "Customer Care", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop" }
+            ].map((member, idx) => (
+              <div key={idx} className="group">
+                <div className="relative overflow-hidden rounded-[30px] mb-6 shadow-md aspect-[4/5]">
+                  <img 
+                    src={member.img} 
+                    alt={member.name} 
+                    className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                </div>
+                <div className="text-center">
+                  <h3 className="text-[22px] font-bold text-gray-900 mb-1 group-hover:text-primary transition-colors">{member.name}</h3>
+                  <p className="text-gray-500 font-medium uppercase text-xs tracking-[2px]">{member.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
