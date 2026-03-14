@@ -144,6 +144,11 @@ const AdminDashboard = () => {
       if (data.success) {
         // Update local state instead of full re-fetch for better UX
         setBookings(prev => prev.map(b => b._id === id ? { ...b, status: newStatus } : b));
+        
+        // If it was completed, refresh site stats as they were likely auto-updated on server
+        if (newStatus === 'completed') {
+          fetchStats();
+        }
       } else {
         alert(data.message || 'Failed to update status');
       }

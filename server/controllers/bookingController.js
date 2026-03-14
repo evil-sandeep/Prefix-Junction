@@ -1,4 +1,5 @@
 const Booking = require('../models/Booking');
+const Stat = require('../models/Stat');
 
 exports.createBooking = async (req, res) => {
   try {
@@ -64,6 +65,21 @@ exports.updateBookingStatus = async (req, res) => {
         success: false,
         message: "Booking not found"
       });
+    }
+
+    // If marked as completed, increment stats
+    if (status === 'completed') {
+      try {
+        await Stat.findOneAndUpdate(
+          { isSingleton: true },
+          { $inc: { happyPets: 1 } },
+          { upsert: true }
+        );
+      } catch (statError) {
+        console.error('Error auto-incrementing stats:', statError);
+        // We don't fail the booking update if stats update fails, 
+        // but we log it.
+      }
     }
 
     res.status(200).json({
