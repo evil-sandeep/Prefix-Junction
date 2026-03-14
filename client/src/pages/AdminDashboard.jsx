@@ -7,8 +7,22 @@ const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [secretKey, setSecretKey] = useState('');
+  const [accessError, setAccessError] = useState('');
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (secretKey === 'Sandeep2274') {
+      setIsAuthenticated(true);
+      setAccessError('');
+    } else {
+      setAccessError('Invalid Access Key');
+    }
+  };
 
   const fetchBookings = async () => {
+    if (!isAuthenticated) return;
     setLoading(true);
     try {
       const response = await fetch('http://localhost:5000/api/bookings');
@@ -27,8 +41,52 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    fetchBookings();
-  }, []);
+    if (isAuthenticated) {
+      fetchBookings();
+    }
+  }, [isAuthenticated]);
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-[#f8fafc] font-['Outfit'] flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center px-6 py-24">
+          <div className="w-full max-w-[450px] bg-white rounded-[32px] shadow-[0_30px_80px_rgba(0,0,0,0.08)] p-12 border border-white">
+            <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mx-auto mb-8">
+              <LayoutDashboard size={32} />
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 text-center mb-2">Admin Access</h2>
+            <p className="text-gray-500 text-center mb-10">Please enter your secret key to continue.</p>
+            
+            <form onSubmit={handleLogin} className="space-y-6">
+              {accessError && (
+                <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl flex items-center gap-3 text-sm font-medium animate-shake">
+                  <AlertCircle size={18} />
+                  {accessError}
+                </div>
+              )}
+              <div className="relative">
+                <input 
+                  type="password" 
+                  value={secretKey}
+                  onChange={(e) => setSecretKey(e.target.value)}
+                  placeholder="Enter Secret Key" 
+                  className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
+                />
+              </div>
+              <button 
+                type="submit" 
+                className="w-full bg-primary hover:bg-[#00b875] text-white font-bold py-5 rounded-xl transition-all shadow-[0_15px_30px_rgba(0,173,111,0.25)] hover:shadow-[0_20px_40px_rgba(0,173,111,0.3)] hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3"
+              >
+                Access Dashboard
+              </button>
+            </form>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Outfit']">
