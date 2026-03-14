@@ -5,4 +5,7 @@ const bookingController = require('../controllers/bookingController');
 // POST /api/book-slot
 router.post('/book-slot', bookingController.createBooking);
 
+// GET /api/bookings
+router.get('/bookings', bookingController.getBookings);
+
 module.exports = router;
