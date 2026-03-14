@@ -8,6 +8,7 @@ import WhyChooseUs from './pages/WhyChooseUs';
 import OurServices from './pages/OurServices';
 import HolisticCare from './pages/HolisticCare';
 import AdminDashboard from './pages/AdminDashboard';
+import OurProduct from './pages/OurProduct';
 
 function App() {
   console.log('App is rendering');
@@ -21,6 +22,7 @@ function App() {
         <Route path="/why-choose-us" element={<WhyChooseUs />} />
         <Route path="/our-services" element={<OurServices />} />
         <Route path="/holistic-care" element={<HolisticCare />} />
+        <Route path="/our-product" element={<OurProduct />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
