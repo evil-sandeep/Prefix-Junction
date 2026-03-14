@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import { jsPDF } from 'jspdf';
+import emailjs from '@emailjs/browser';
 
 const AboutBookingCTA = () => {
   const [formData, setFormData] = useState({
@@ -95,6 +96,30 @@ const AboutBookingCTA = () => {
     doc.save(`Petflix-Receipt-${bookingId}.pdf`);
   };
 
+  const sendEmailConfirmation = async (bookingId, bookingData) => {
+    const templateParams = {
+      booking_id: bookingId,
+      user_name: bookingData.name,
+      user_email: bookingData.email,
+      user_phone: bookingData.phone,
+      service_name: bookingData.service,
+      booking_date: bookingData.date,
+      booking_slot: bookingData.slot,
+    };
+
+    try {
+      await emailjs.send(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        templateParams,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      console.log('Email sent successfully');
+    } catch (error) {
+      console.error('Failed to send email:', error);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus({ loading: true, success: false, error: null, bookingId: null, bookingData: null });
@@ -111,13 +136,20 @@ const AboutBookingCTA = () => {
       const data = await response.json();
 
       if (data.success) {
+        const newBookingId = data.booking.bookingId;
+        const newBookingData = { ...formData };
+        
         setStatus({
           loading: false,
           success: true,
           error: null,
-          bookingId: data.booking.bookingId,
-          bookingData: { ...formData }
+          bookingId: newBookingId,
+          bookingData: newBookingData
         });
+        
+        // Send Email Confirmation
+        sendEmailConfirmation(newBookingId, newBookingData);
+        
         // Reset form
         setFormData({
           name: '',
