@@ -20,7 +20,12 @@ const OurWork = () => {
         console.error('Error fetching stats:', error);
       }
     };
+    
     fetchStats();
+    
+    // Poll for latest stats every 30 seconds
+    const interval = setInterval(fetchStats, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   return (
