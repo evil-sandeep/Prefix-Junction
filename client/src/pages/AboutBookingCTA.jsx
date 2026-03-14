@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
+import { jsPDF } from 'jspdf';
 
 const AboutBookingCTA = () => {
   const [formData, setFormData] = useState({
@@ -33,37 +34,65 @@ const AboutBookingCTA = () => {
     const { name, email, phone, service, date, slot } = status.bookingData;
     const bookingId = status.bookingId;
     
-    const receiptText = `
-------------------------------------------
-      PETFLIX JUNCTION RECEIPT
-------------------------------------------
-Booking ID: ${bookingId}
-Generated: ${new Date().toLocaleString()}
-------------------------------------------
-CUSTOMER DETAILS:
-Name  : ${name}
-Phone : ${phone}
-Email : ${email}
-------------------------------------------
-APPOINTMENT DETAILS:
-Service: ${service}
-Date   : ${date}
-Slot   : ${slot}
-------------------------------------------
-Thank you for choosing Petflix Junction!
-We look forward to pampring your pet.
-------------------------------------------
-    `;
-    
-    const blob = new Blob([receiptText], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `Petflix-Receipt-${bookingId}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+    const doc = new jsPDF();
+
+    // Add Logo or Brand Name
+    doc.setFontSize(22);
+    doc.setTextColor(0, 173, 111); // Primary color
+    doc.text('PETFLIX JUNCTION', 105, 20, { align: 'center' });
+    doc.setFontSize(14);
+    doc.setTextColor(100);
+    doc.text('Pet Grooming Services Confirmation', 105, 30, { align: 'center' });
+
+    // Draw Line
+    doc.setDrawColor(200);
+    doc.line(20, 35, 190, 35);
+
+    // Booking ID Highlight
+    doc.setFontSize(12);
+    doc.setTextColor(0);
+    doc.text(`Booking ID:`, 20, 50);
+    doc.setFont(undefined, 'bold');
+    doc.text(bookingId.toUpperCase(), 50, 50);
+    doc.setFont(undefined, 'normal');
+
+    // Customer Details Section
+    doc.setFontSize(14);
+    doc.setTextColor(0, 173, 111);
+    doc.text('Customer Details', 20, 65);
+    doc.setFontSize(11);
+    doc.setTextColor(0);
+    doc.text(`Name:`, 20, 75);
+    doc.text(name, 50, 75);
+    doc.text(`Phone:`, 20, 82);
+    doc.text(phone, 50, 82);
+    doc.text(`Email:`, 20, 89);
+    doc.text(email, 50, 89);
+
+    // Appointment Details Section
+    doc.setFontSize(14);
+    doc.setTextColor(0, 173, 111);
+    doc.text('Appointment Details', 20, 105);
+    doc.setFontSize(11);
+    doc.setTextColor(0);
+    doc.text(`Service:`, 20, 115);
+    doc.text(service, 50, 115);
+    doc.text(`Date:`, 20, 122);
+    doc.text(date, 50, 122);
+    doc.text(`Slot:`, 20, 129);
+    doc.text(slot, 50, 129);
+
+    // Footer
+    doc.setDrawColor(200);
+    doc.line(20, 145, 190, 145);
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.text('Thank you for choosing Petflix Junction!', 105, 155, { align: 'center' });
+    doc.text('We look forward to pampering your pet.', 105, 162, { align: 'center' });
+    doc.setFontSize(8);
+    doc.text(`Generated on: ${new Date().toLocaleString()}`, 105, 175, { align: 'center' });
+
+    doc.save(`Petflix-Receipt-${bookingId}.pdf`);
   };
 
   const handleSubmit = async (e) => {
