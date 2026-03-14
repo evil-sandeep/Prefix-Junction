@@ -16,7 +16,8 @@ const AboutBookingCTA = () => {
     loading: false,
     success: false,
     error: null,
-    bookingId: null
+    bookingId: null,
+    bookingData: null
   });
 
   const handleChange = (e) => {
@@ -26,9 +27,48 @@ const AboutBookingCTA = () => {
     });
   };
 
+  const handleDownloadReceipt = () => {
+    if (!status.bookingId || !status.bookingData) return;
+    
+    const { name, email, phone, service, date, slot } = status.bookingData;
+    const bookingId = status.bookingId;
+    
+    const receiptText = `
+------------------------------------------
+      PETFLIX JUNCTION RECEIPT
+------------------------------------------
+Booking ID: ${bookingId}
+Generated: ${new Date().toLocaleString()}
+------------------------------------------
+CUSTOMER DETAILS:
+Name  : ${name}
+Phone : ${phone}
+Email : ${email}
+------------------------------------------
+APPOINTMENT DETAILS:
+Service: ${service}
+Date   : ${date}
+Slot   : ${slot}
+------------------------------------------
+Thank you for choosing Petflix Junction!
+We look forward to pampring your pet.
+------------------------------------------
+    `;
+    
+    const blob = new Blob([receiptText], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `Petflix-Receipt-${bookingId}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus({ loading: true, success: false, error: null, bookingId: null });
+    setStatus({ loading: true, success: false, error: null, bookingId: null, bookingData: null });
 
     try {
       const response = await fetch('http://localhost:5000/api/book-slot', {
@@ -46,7 +86,8 @@ const AboutBookingCTA = () => {
           loading: false,
           success: true,
           error: null,
-          bookingId: data.booking.bookingId
+          bookingId: data.booking.bookingId,
+          bookingData: { ...formData }
         });
         // Reset form
         setFormData({
@@ -66,7 +107,8 @@ const AboutBookingCTA = () => {
         loading: false,
         success: false,
         error: err.message,
-        bookingId: null
+        bookingId: null,
+        bookingData: null
       });
     }
   };
@@ -87,16 +129,26 @@ const AboutBookingCTA = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 mb-2">Booking Successful!</h3>
                 <p className="text-gray-600 mb-6">Your slot has been reserved.</p>
-                <div className="bg-white border-2 border-dashed border-green-200 rounded-xl p-4">
+                <div className="bg-white border-2 border-dashed border-green-200 rounded-xl p-4 mb-8">
                   <span className="text-sm text-gray-400 block mb-1">Your Booking ID</span>
                   <span className="text-2xl font-black text-primary tracking-wider uppercase">{status.bookingId}</span>
                 </div>
-                <button 
-                  onClick={() => setStatus({ ...status, success: false })}
-                  className="mt-8 text-primary font-bold hover:underline"
-                >
-                  Book another slot
-                </button>
+                
+                <div className="flex flex-col gap-4">
+                  <button 
+                    onClick={handleDownloadReceipt}
+                    className="w-full bg-primary hover:bg-[#00b875] text-white font-bold py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
+                  >
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                    Download Receipt
+                  </button>
+                  <button 
+                    onClick={() => setStatus({ ...status, success: false })}
+                    className="text-primary font-bold hover:underline"
+                  >
+                    Book another slot
+                  </button>
+                </div>
               </div>
             ) : (
               <form className="space-y-6" onSubmit={handleSubmit}>
