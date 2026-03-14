@@ -60,8 +60,8 @@ const AdminDashboard = () => {
 
   const handleStatUpdate = async (field, action) => {
     try {
-      const response = await fetch('http://localhost:5000/api/stats', {
-        method: 'PATCH',
+      const response = await fetch('http://localhost:5000/api/stats/update', {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ field, action })
       });
