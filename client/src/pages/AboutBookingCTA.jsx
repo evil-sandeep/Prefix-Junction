@@ -1,8 +1,76 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { CheckCircle2 } from 'lucide-react';
+import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 
 const AboutBookingCTA = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    service: '',
+    date: '',
+    slot: ''
+  });
+
+  const [status, setStatus] = useState({
+    loading: false,
+    success: false,
+    error: null,
+    bookingId: null
+  });
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name || e.target.id]: e.target.value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus({ loading: true, success: false, error: null, bookingId: null });
+
+    try {
+      const response = await fetch('http://localhost:5000/api/book-slot', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStatus({
+          loading: false,
+          success: true,
+          error: null,
+          bookingId: data.booking.bookingId
+        });
+        // Reset form
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          date: '',
+          slot: ''
+        });
+      } else {
+        throw new Error(data.message || 'Failed to book slot');
+      }
+    } catch (err) {
+      console.error('Booking Error:', err);
+      setStatus({
+        loading: false,
+        success: false,
+        error: err.message,
+        bookingId: null
+      });
+    }
+  };
+
   return (
     <section className="py-24 bg-white" id="booking">
       <div className="container mx-auto px-6">
@@ -11,77 +79,138 @@ const AboutBookingCTA = () => {
           {/* Booking Form Card (Left Side) */}
           <div className="w-full lg:w-[500px] bg-white rounded-[32px] shadow-[0_30px_80px_rgba(0,0,0,0.08)] p-12 border border-white">
             <h2 className="text-[32px] font-bold text-primary mb-10 tracking-tight">Book Your slot</h2>
-            <form className="space-y-6">
-              <div>
-                <input 
-                  type="text" 
-                  placeholder="Your Name" 
-                  className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
-                />
-              </div>
-              <div>
-                <input 
-                  type="email" 
-                  placeholder="Email Address" 
-                  className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
-                />
-              </div>
-              <div>
-                <input 
-                  type="tel" 
-                  placeholder="Phone Number" 
-                  className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
-                />
-              </div>
-              <div className="relative group">
-                <select className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 appearance-none cursor-pointer font-medium">
-                  <option>Select A Service</option>
-                  <option>Teeth Brushing</option>
-                  <option>Ear Cleaning</option>
-                  <option>Deshedding / Dematting</option>
-                  <option>Shampoo & Blow Drying</option>
-                  <option>Hygiene Cut</option>
-                  <option>Zero Hair Cut / Trimming</option>
-                  <option>Tick & Flea Treatment</option>
-                  <option>Cat Zero Hair Cut with Nail Cut</option>
-                  <option>Dog Boarding 24 Hours</option>
-                  <option>Cat Boarding</option>
-                  <option>Dog Day Care</option>
-                  <option>Swimming + Shampoo Bath</option>
-                  <option>Normal Bath Pack</option>
-                  <option>Full Grooming Bath Pack</option>
-                  <option>Advance Full Grooming Bath Pack</option>
-                  <option>Full Grooming Medicated Bath Pack</option>
-                  <option>Pet Resort Pack</option>
-                </select>
-                <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            
+            {status.success ? (
+              <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center animate-in fade-in zoom-in duration-300">
+                <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white mx-auto mb-6">
+                  <CheckCircle2 size={32} />
                 </div>
-              </div>
-              <div className="relative">
-                <input 
-                  type="date" 
-                  className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 uppercase text-xs font-bold tracking-widest"
-                />
-              </div>
-              <div className="relative group">
-                <select className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 appearance-none cursor-pointer font-medium">
-                  <option>Select a slot</option>
-                  <option>Morning (9 AM - 12 PM)</option>
-                  <option>Afternoon (1 PM - 4 PM)</option>
-                  <option>Evening (5 PM - 8 PM)</option>
-                </select>
-                <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <h3 className="text-xl font-bold text-gray-900 mb-2">Booking Successful!</h3>
+                <p className="text-gray-600 mb-6">Your slot has been reserved.</p>
+                <div className="bg-white border-2 border-dashed border-green-200 rounded-xl p-4">
+                  <span className="text-sm text-gray-400 block mb-1">Your Booking ID</span>
+                  <span className="text-2xl font-black text-primary tracking-wider uppercase">{status.bookingId}</span>
                 </div>
+                <button 
+                  onClick={() => setStatus({ ...status, success: false })}
+                  className="mt-8 text-primary font-bold hover:underline"
+                >
+                  Book another slot
+                </button>
               </div>
-              <button 
-                type="submit" 
-                className="w-full bg-primary hover:bg-[#00b875] text-white font-bold py-5 rounded-xl transition-all shadow-[0_15px_30px_rgba(0,173,111,0.25)] hover:shadow-[0_20px_40px_rgba(0,173,111,0.3)] hover:-translate-y-1 active:translate-y-0"
-              >
-                Book Now
-              </button>
-            </form>
+            ) : (
+              <form className="space-y-6" onSubmit={handleSubmit}>
+                {status.error && (
+                  <div className="bg-red-50 border border-red-100 text-red-600 p-4 rounded-xl flex items-center gap-3 text-sm font-medium">
+                    <AlertCircle size={18} />
+                    {status.error}
+                  </div>
+                )}
+                <div>
+                  <input 
+                    type="text" 
+                    name="name"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Your Name" 
+                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="email" 
+                    name="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="Email Address" 
+                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
+                  />
+                </div>
+                <div>
+                  <input 
+                    type="tel" 
+                    name="phone"
+                    required
+                    value={formData.phone}
+                    onChange={handleChange}
+                    placeholder="Phone Number" 
+                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
+                  />
+                </div>
+                <div className="relative group">
+                  <select 
+                    name="service"
+                    required
+                    value={formData.service}
+                    onChange={handleChange}
+                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 appearance-none cursor-pointer font-medium"
+                  >
+                    <option value="">Select A Service</option>
+                    <option>Teeth Brushing</option>
+                    <option>Ear Cleaning</option>
+                    <option>Deshedding / Dematting</option>
+                    <option>Shampoo & Blow Drying</option>
+                    <option>Hygiene Cut</option>
+                    <option>Zero Hair Cut / Trimming</option>
+                    <option>Tick & Flea Treatment</option>
+                    <option>Cat Zero Hair Cut with Nail Cut</option>
+                    <option>Dog Boarding 24 Hours</option>
+                    <option>Cat Boarding</option>
+                    <option>Dog Day Care</option>
+                    <option>Swimming + Shampoo Bath</option>
+                    <option>Normal Bath Pack</option>
+                    <option>Full Grooming Bath Pack</option>
+                    <option>Advance Full Grooming Bath Pack</option>
+                    <option>Full Grooming Medicated Bath Pack</option>
+                    <option>Pet Resort Pack</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+                </div>
+                <div className="relative">
+                  <input 
+                    type="date" 
+                    name="date"
+                    required
+                    value={formData.date}
+                    onChange={handleChange}
+                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 uppercase text-xs font-bold tracking-widest"
+                  />
+                </div>
+                <div className="relative group">
+                  <select 
+                    name="slot"
+                    required
+                    value={formData.slot}
+                    onChange={handleChange}
+                    className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 appearance-none cursor-pointer font-medium"
+                  >
+                    <option value="">Select a slot</option>
+                    <option>Morning (9 AM - 12 PM)</option>
+                    <option>Afternoon (1 PM - 4 PM)</option>
+                    <option>Evening (5 PM - 8 PM)</option>
+                  </select>
+                  <div className="absolute inset-y-0 right-6 flex items-center pointer-events-none text-gray-400 group-focus-within:text-primary transition-colors">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  </div>
+                </div>
+                <button 
+                  type="submit" 
+                  disabled={status.loading}
+                  className="w-full bg-primary hover:bg-[#00b875] text-white font-bold py-5 rounded-xl transition-all shadow-[0_15px_30px_rgba(0,173,111,0.25)] hover:shadow-[0_20px_40px_rgba(0,173,111,0.3)] hover:-translate-y-1 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
+                >
+                  {status.loading ? (
+                    <>
+                      <Loader2 className="animate-spin" size={20} />
+                      Processing...
+                    </>
+                  ) : 'Book Now'}
+                </button>
+              </form>
+            )}
           </div>
 
           {/* About Us Content (Right Side) */}
