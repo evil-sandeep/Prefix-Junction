@@ -96,35 +96,29 @@ const AdminDashboard = () => {
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div>
-            <div className="flex items-center gap-3 text-primary font-bold mb-2">
-              <LayoutDashboard size={20} />
-              <span className="uppercase tracking-widest text-sm">Administration</span>
-            </div>
-            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight">Booking Dashboard</h1>
+            <h1 className="text-4xl font-extrabold text-gray-900 tracking-tight mb-2">Admin Dashboard</h1>
+            <p className="text-gray-500 font-medium">Manage your salon appointments and customer bookings.</p>
           </div>
           <button 
             onClick={fetchBookings}
-            className="flex items-center gap-2 bg-white border border-gray-200 px-6 py-3 rounded-xl font-bold text-gray-700 hover:bg-gray-50 transition-all shadow-sm active:scale-95"
+            className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-xl font-bold hover:bg-[#00b875] transition-all shadow-lg active:scale-95"
           >
             <RefreshCw size={18} className={loading ? 'animate-spin' : ''} />
-            Refresh Data
+            Refresh Queue
           </button>
         </div>
 
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-white p-8 rounded-3xl border border-gray-100 shadow-sm">
-            <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center text-primary mb-4">
-              <ClipboardList size={24} />
-            </div>
-            <div className="text-3xl font-black text-gray-900 mb-1">{bookings.length}</div>
-            <div className="text-gray-500 font-medium">Total Bookings</div>
-          </div>
-          {/* Add more stats if needed */}
+        {/* Booking Queue Section */}
+        <div className="mb-8 flex items-center gap-3">
+          <div className="w-2 h-8 bg-primary rounded-full"></div>
+          <h2 className="text-2xl font-bold text-gray-800">Booking Queue</h2>
+          <span className="bg-gray-100 text-gray-500 px-3 py-1 rounded-full text-sm font-bold">
+            {bookings.length} Total
+          </span>
         </div>
 
         {/* Table Section */}
-        <div className="bg-white rounded-[32px] border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.04)] overflow-hidden">
+        <div className="bg-white rounded-3xl border border-gray-100 shadow-[0_20px_50px_rgba(0,0,0,0.04)] overflow-hidden">
           {loading ? (
             <div className="py-24 flex flex-col items-center justify-center text-gray-400 gap-4">
               <Loader2 className="animate-spin text-primary" size={40} />
@@ -145,11 +139,12 @@ const AdminDashboard = () => {
             <div className="overflow-x-auto">
               <table className="w-full text-left">
                 <thead>
-                  <tr className="bg-gray-50/50 border-b border-gray-100">
+                  <tr className="bg-gray-50 border-b border-gray-100">
                     <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest">Booking ID</th>
-                    <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest">Customer</th>
+                    <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest">Name</th>
                     <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest">Service</th>
-                    <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest">Appointment</th>
+                    <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest">Date</th>
+                    <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest">Slot</th>
                     <th className="px-8 py-6 text-xs font-bold text-gray-400 uppercase tracking-widest text-right">Status</th>
                   </tr>
                 </thead>
@@ -157,36 +152,27 @@ const AdminDashboard = () => {
                   {bookings.map((booking) => (
                     <tr key={booking._id} className="hover:bg-gray-50/50 transition-colors">
                       <td className="px-8 py-6">
-                        <span className="font-black text-primary text-sm uppercase tracking-tight bg-primary/5 px-3 py-1 rounded-lg">
+                        <span className="font-bold text-primary text-sm tracking-tight">
                           {booking.bookingId}
                         </span>
                       </td>
                       <td className="px-8 py-6">
-                        <div className="flex flex-col">
-                          <span className="font-bold text-gray-900">{booking.name}</span>
-                          <span className="text-sm text-gray-400">{booking.phone}</span>
-                        </div>
+                        <span className="font-bold text-gray-900">{booking.name}</span>
                       </td>
                       <td className="px-8 py-6">
                         <span className="font-medium text-gray-700">{booking.service}</span>
                       </td>
                       <td className="px-8 py-6">
-                        <div className="flex flex-col">
-                          <div className="flex items-center gap-2 text-gray-900 font-bold mb-1 text-sm">
-                            <Calendar size={14} className="text-gray-400" />
-                            {booking.date}
-                          </div>
-                          <div className="flex items-center gap-2 text-gray-400 text-xs">
-                            <Clock size={14} />
-                            {booking.slot}
-                          </div>
-                        </div>
+                        <span className="font-medium text-gray-700">{booking.date}</span>
+                      </td>
+                      <td className="px-8 py-6">
+                        <span className="font-medium text-gray-700">{booking.slot}</span>
                       </td>
                       <td className="px-8 py-6 text-right">
-                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest ${
-                          booking.status === 'confirmed' ? 'bg-green-100 text-green-600' :
-                          booking.status === 'pending' ? 'bg-yellow-100 text-yellow-600' :
-                          'bg-gray-100 text-gray-600'
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
+                          booking.status === 'confirmed' ? 'bg-green-100 text-green-600 border border-green-200' :
+                          booking.status === 'pending' ? 'bg-amber-100 text-amber-600 border border-amber-200' :
+                          'bg-gray-100 text-gray-600 border border-gray-200'
                         }`}>
                           {booking.status}
                         </span>
