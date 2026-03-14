@@ -24,3 +24,14 @@ body {
 .btn-primary {
   @apply bg-primary hover:bg-primary-hover text-white font-bold py-2.5 px-7 rounded-full transition-all shadow-md hover:shadow-lg active:scale-95;
 }
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  50% { transform: translateX(8px); }
+  75% { transform: translateX(-8px); }
+}
+
+.animate-shake {
+  animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+}
