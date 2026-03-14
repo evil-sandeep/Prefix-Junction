@@ -6,6 +6,7 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 5000;
 const bookingRoutes = require('./routes/bookingRoutes');
+const statRoutes = require('./routes/statRoutes');
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -18,6 +19,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api', bookingRoutes);
+app.use('/api/stats', statRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

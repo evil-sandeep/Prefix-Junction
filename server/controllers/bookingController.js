@@ -48,3 +48,35 @@ exports.getBookings = async (req, res) => {
     });
   }
 };
+exports.updateBookingStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    const updatedBooking = await Booking.findByIdAndUpdate(
+      id,
+      { status },
+      { new: true }
+    );
+
+    if (!updatedBooking) {
+      return res.status(404).json({
+        success: false,
+        message: "Booking not found"
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: `Booking status updated to ${status}`,
+      booking: updatedBooking
+    });
+  } catch (error) {
+    console.error('Error updating booking status:', error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update booking status",
+      error: error.message
+    });
+  }
+};

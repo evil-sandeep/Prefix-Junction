@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { LayoutDashboard, Users, Calendar, Clock, ClipboardList, Loader2, AlertCircle, RefreshCw } from 'lucide-react';
+import { LayoutDashboard, Users, Calendar, Clock, ClipboardList, Loader2, AlertCircle, RefreshCw, Plus, Minus, TrendingUp, Award, ShieldCheck, Heart } from 'lucide-react';
 
 const AdminDashboard = () => {
   const [bookings, setBookings] = useState([]);
+  const [siteStats, setSiteStats] = useState({
+    happyPets: 500,
+    expertGroomers: 10,
+    premiumCare: "24/7",
+    safetyRate: 100
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -40,9 +46,38 @@ const AdminDashboard = () => {
     }
   };
 
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/stats');
+      const data = await response.json();
+      if (data.success) {
+        setSiteStats(data.stats);
+      }
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+    }
+  };
+
+  const handleStatUpdate = async (field, action) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/stats', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ field, action })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setSiteStats(data.stats);
+      }
+    } catch (err) {
+      console.error('Error updating stat:', err);
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       fetchBookings();
+      fetchStats();
       
       // Auto-poll for new bookings every 10 seconds
       const pollInterval = setInterval(fetchBookings, 10000);
@@ -95,6 +130,29 @@ const AdminDashboard = () => {
     );
   }
 
+  const updateStatus = async (id, newStatus) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status: newStatus }),
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        // Update local state instead of full re-fetch for better UX
+        setBookings(prev => prev.map(b => b._id === id ? { ...b, status: newStatus } : b));
+      } else {
+        alert(data.message || 'Failed to update status');
+      }
+    } catch (err) {
+      console.error('Status update error:', err);
+      alert('Error updating status');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Outfit']">
       <Navbar />
@@ -109,8 +167,8 @@ const AdminDashboard = () => {
                 Live Queue
               </div>
             </div>
-            <h1 className="text-5xl font-black text-gray-900 tracking-tighter mb-4">Booking Queue</h1>
-            <p className="text-xl text-gray-500 font-medium">Real-time salon appointment management system.</p>
+            <h1 className="text-5xl font-black text-gray-900 tracking-tighter mb-4">Admin Dashboard</h1>
+            <p className="text-xl text-gray-500 font-medium">Manage your site statistics and salon queue.</p>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right hidden md:block">
@@ -118,7 +176,7 @@ const AdminDashboard = () => {
               <div className="text-gray-900 font-black">{new Date().toLocaleTimeString()}</div>
             </div>
             <button 
-              onClick={fetchBookings}
+              onClick={() => { fetchBookings(); fetchStats(); }}
               className="flex items-center gap-3 bg-white border-2 border-gray-100 p-4 rounded-2xl font-black text-gray-700 hover:border-primary hover:text-primary transition-all shadow-sm group active:scale-95"
             >
               <RefreshCw size={20} className={`${loading ? 'animate-spin text-primary' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
@@ -126,15 +184,60 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* Status Tracker */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
-          <div className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -mr-16 -mt-16 transition-transform group-hover:scale-110"></div>
-            <div className="relative z-10">
-              <div className="text-sm text-gray-400 font-bold uppercase tracking-widest mb-2">Total Waiting</div>
-              <div className="text-4xl font-black text-gray-900">{bookings.length}</div>
-            </div>
+        {/* Our Work Stats Section */}
+        <div className="mb-16">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="w-2 h-10 bg-primary rounded-full"></div>
+            <h2 className="text-3xl font-black text-gray-900 tracking-tight">Our Work Stats</h2>
           </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { id: 'happyPets', label: 'Happy Pets', value: siteStats.happyPets, icon: Heart, color: 'text-rose-500', bg: 'bg-rose-50' },
+              { id: 'expertGroomers', label: 'Expert Groomers', value: siteStats.expertGroomers, icon: Award, color: 'text-primary', bg: 'bg-primary/10' },
+              { id: 'premiumCare', label: 'Premium Care', value: siteStats.premiumCare, icon: ShieldCheck, color: 'text-blue-500', bg: 'bg-blue-50', isStatic: true },
+              { id: 'safetyRate', label: 'Safety Rate', value: siteStats.safetyRate, icon: TrendingUp, color: 'text-orange-500', bg: 'bg-orange-50' }
+            ].map((stat) => (
+              <div key={stat.id} className="bg-white p-8 rounded-[32px] border border-gray-100 shadow-sm group hover:shadow-xl transition-all duration-500">
+                <div className="flex items-center justify-between mb-6">
+                  <div className={`w-14 h-14 ${stat.bg} ${stat.color} rounded-2xl flex items-center justify-center`}>
+                    <stat.icon size={28} />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    {!stat.isStatic && (
+                      <>
+                        <button 
+                          onClick={() => handleStatUpdate(stat.id, 'decrement')}
+                          className="w-10 h-10 bg-gray-50 text-gray-400 hover:bg-red-50 hover:text-red-500 rounded-xl flex items-center justify-center transition-all active:scale-90"
+                        >
+                          <Minus size={18} />
+                        </button>
+                        <button 
+                          onClick={() => handleStatUpdate(stat.id, 'increment')}
+                          className="w-10 h-10 bg-gray-50 text-gray-400 hover:bg-primary/10 hover:text-primary rounded-xl flex items-center justify-center transition-all active:scale-90"
+                        >
+                          <Plus size={18} />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                </div>
+                <div className="text-sm text-gray-400 font-bold uppercase tracking-widest mb-1">{stat.label}</div>
+                <div className="text-4xl font-black text-gray-900 tracking-tighter">
+                  {stat.value}{stat.id === 'safetyRate' ? '%' : (stat.id === 'premiumCare' ? '' : '+')}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Booking Queue Header */}
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-2 h-10 bg-primary rounded-full"></div>
+          <h2 className="text-3xl font-black text-gray-900 tracking-tight">Booking Queue</h2>
+          <span className="bg-primary/5 text-primary px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest ml-4">
+            {bookings.length} Total
+          </span>
         </div>
 
         {/* Queue Table */}
@@ -172,7 +275,8 @@ const AdminDashboard = () => {
                     <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Customer Details</th>
                     <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Service</th>
                     <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Appointment</th>
-                    <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] text-right">Status</th>
+                    <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em]">Status</th>
+                    <th className="px-10 py-8 text-[11px] font-black text-gray-400 uppercase tracking-[0.2em] text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-50">
@@ -201,14 +305,36 @@ const AdminDashboard = () => {
                           <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">{booking.slot}</span>
                         </div>
                       </td>
-                      <td className="px-10 py-8 text-right">
+                      <td className="px-10 py-8">
                         <span className={`inline-flex items-center px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-[0.15em] border ${
                           booking.status === 'confirmed' ? 'bg-green-50 text-green-600 border-green-100' :
                           booking.status === 'pending' ? 'bg-amber-50 text-amber-600 border-amber-100' :
+                          booking.status === 'completed' ? 'bg-blue-50 text-blue-600 border-blue-100' :
+                          booking.status === 'cancelled' ? 'bg-red-50 text-red-600 border-red-100' :
                           'bg-gray-50 text-gray-500 border-gray-100'
                         }`}>
                           {booking.status}
                         </span>
+                      </td>
+                      <td className="px-10 py-8 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          {booking.status !== 'completed' && booking.status !== 'cancelled' && (
+                            <>
+                              <button 
+                                onClick={() => updateStatus(booking._id, 'completed')}
+                                className="bg-primary/10 text-primary hover:bg-primary hover:text-white px-3 py-2 rounded-lg text-xs font-bold transition-all active:scale-95"
+                              >
+                                Mark Completed
+                              </button>
+                              <button 
+                                onClick={() => updateStatus(booking._id, 'cancelled')}
+                                className="bg-red-50 text-red-500 hover:bg-red-500 hover:text-white px-3 py-2 rounded-lg text-xs font-bold transition-all active:scale-95"
+                              >
+                                Cancel
+                              </button>
+                            </>
+                          )}
+                        </div>
                       </td>
                     </tr>
                   ))}
