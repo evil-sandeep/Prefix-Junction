@@ -33,7 +33,7 @@ exports.createBooking = async (req, res) => {
 
 exports.getBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find().sort({ createdAt: -1 });
+    const bookings = await Booking.find().sort({ createdAt: 1 });
     res.status(200).json({
       success: true,
       count: bookings.length,
