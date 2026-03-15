@@ -126,7 +126,7 @@ function BookYourSlot() {
     setStatus({ loading: true, success: false, error: null, bookingId: null, bookingData: null });
 
     try {
-      const response = await fetch('http://localhost:5000/api/book-slot', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/book-slot`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

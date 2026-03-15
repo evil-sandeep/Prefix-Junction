@@ -1,7 +1,34 @@
-import React from 'react';
-import { MapPin, Phone, Mail } from 'lucide-react';
+import React, { useRef, useState } from 'react';
+import { MapPin, Phone, Mail, Send, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const ContactUs = () => {
+  const form = useRef();
+  const [status, setStatus] = useState({ type: null, message: '' });
+  const [loading, setLoading] = useState(false);
+
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus({ type: null, message: '' });
+
+    emailjs.sendForm(
+      import.meta.env.VITE_EMAILJS_SERVICE_ID,
+      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+      form.current,
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+    )
+    .then((result) => {
+      setLoading(false);
+      setStatus({ type: 'success', message: 'Message sent successfully! We will get back to you soon.' });
+      form.current.reset();
+    }, (error) => {
+      setLoading(false);
+      setStatus({ type: 'error', message: 'Failed to send message. Please try again later.' });
+      console.error('EmailJS Error:', error);
+    });
+  };
+
   return (
     <section className="py-24 bg-[#f8f9fa]" id="contact">
       <div className="container mx-auto px-6">
@@ -47,15 +74,38 @@ const ContactUs = () => {
           </div>
           
           <div className="md:w-1/2 p-12">
-            <form className="space-y-6" onSubmit={(e) => e.preventDefault()}>
+            <form ref={form} className="space-y-6" onSubmit={sendEmail}>
               <div className="grid grid-cols-1 gap-6">
-                <input type="text" placeholder="Your Name" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
-                <input type="email" placeholder="Your Email" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
-                <input type="text" placeholder="Subject" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
-                <textarea placeholder="Message" rows="4" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none resize-none"></textarea>
+                <input required name="from_name" type="text" placeholder="Your Name" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                <input required name="reply_to" type="email" placeholder="Your Email" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                <input name="subject" type="text" placeholder="Subject" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                <textarea required name="message" placeholder="Message" rows="4" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none resize-none"></textarea>
               </div>
-              <button className="w-full bg-primary text-white font-bold py-5 rounded-2xl transition-all hover:bg-primary-hover shadow-lg hover:shadow-primary/30 active:scale-[0.98]">
-                Send Message
+
+              {status.type && (
+                <div className={`p-4 rounded-xl flex items-center gap-3 text-sm font-bold ${
+                  status.type === 'success' ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600'
+                }`}>
+                  {status.type === 'success' ? <CheckCircle2 size={18} /> : <AlertCircle size={18} />}
+                  {status.message}
+                </div>
+              )}
+
+              <button 
+                disabled={loading}
+                className="w-full bg-primary text-white font-bold py-5 rounded-2xl transition-all hover:bg-[#00b875] shadow-lg hover:shadow-primary/30 active:scale-[0.98] flex items-center justify-center gap-3 disabled:opacity-70 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 size={20} className="animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <Send size={20} />
+                    Send Message
+                  </>
+                )}
               </button>
             </form>
           </div>

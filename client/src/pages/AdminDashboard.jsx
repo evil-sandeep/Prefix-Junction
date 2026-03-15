@@ -31,7 +31,7 @@ const AdminDashboard = () => {
     if (!isAuthenticated) return;
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/bookings');
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/bookings`);
       const data = await response.json();
       if (data.success) {
         setBookings(data.bookings);
@@ -48,7 +48,7 @@ const AdminDashboard = () => {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/stats');
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/stats`);
       const data = await response.json();
       if (data.success) {
         setSiteStats(data.stats);
@@ -60,7 +60,7 @@ const AdminDashboard = () => {
 
   const handleStatUpdate = async (field, action) => {
     try {
-      const response = await fetch('http://localhost:5000/api/stats/update', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/stats/update`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ field, action })
@@ -132,7 +132,7 @@ const AdminDashboard = () => {
 
   const updateStatus = async (id, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/bookings/${id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/bookings/${id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

@@ -101,10 +101,13 @@ const AboutBookingCTA = () => {
       booking_id: bookingId,
       user_name: bookingData.name,
       user_email: bookingData.email,
+      from_name: bookingData.name,    // Standard field
+      reply_to: bookingData.email,     // Standard field
       user_phone: bookingData.phone,
       service_name: bookingData.service,
       booking_date: bookingData.date,
       booking_slot: bookingData.slot,
+      to_email: 'care@petflixjunction.com', // Optional: provides a fallback if template uses this
     };
 
     try {
@@ -125,7 +128,7 @@ const AboutBookingCTA = () => {
     setStatus({ loading: true, success: false, error: null, bookingId: null, bookingData: null });
 
     try {
-      const response = await fetch('http://localhost:5000/api/book-slot', {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/book-slot`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
