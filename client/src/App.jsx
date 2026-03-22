@@ -9,6 +9,7 @@ import OurServices from './pages/OurServices';
 import HolisticCare from './pages/HolisticCare';
 import AdminDashboard from './pages/AdminDashboard';
 import OurProduct from './pages/OurProduct';
+import Cart from './pages/Cart';
 
 function App() {
   console.log('App is rendering');
@@ -23,6 +24,7 @@ function App() {
         <Route path="/our-services" element={<OurServices />} />
         <Route path="/holistic-care" element={<HolisticCare />} />
         <Route path="/our-product" element={<OurProduct />} />
+        <Route path="/cart" element={<Cart />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
