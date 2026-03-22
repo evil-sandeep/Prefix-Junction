@@ -6,6 +6,8 @@ import { Check, Shield, Star, Zap, Crown, Loader2 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+
 export const PricingSection = () => {
   const [isYearly, setIsYearly] = useState(false);
   const [plans, setPlans] = useState([]);
@@ -16,7 +18,7 @@ export const PricingSection = () => {
   useEffect(() => {
     const fetchPlans = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/plans');
+        const { data } = await axios.get(`${API_BASE_URL}/api/plans`);
         setPlans(data.data.plans);
       } catch (err) {
         console.error('Failed to fetch plans', err);
@@ -38,7 +40,7 @@ export const PricingSection = () => {
       
       // 1. Create order
       const { data: orderData } = await axios.post(
-        'http://localhost:5000/api/subscription/create-order',
+        `${API_BASE_URL}/api/subscription/create-order`,
         { planId, billingCycle },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -53,7 +55,7 @@ export const PricingSection = () => {
         handler: async (response) => {
           try {
             const { data } = await axios.post(
-              'http://localhost:5000/api/subscription/verify-payment',
+              `${API_BASE_URL}/api/subscription/verify-payment`,
               { ...response, planId, billingCycle },
               { headers: { Authorization: `Bearer ${token}` } }
             );
