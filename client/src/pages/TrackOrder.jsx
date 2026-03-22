@@ -37,7 +37,7 @@ const TrackOrder = () => {
       <main className="container mx-auto px-6 py-12 lg:py-20">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div className="flex items-center gap-4">
-            <Link to="/our-product" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
+            <Link to="/products" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
               <ChevronLeft size={20} />
             </Link>
             <h1 className="text-4xl font-black text-slate-900 tracking-tight">Track Order</h1>
@@ -135,7 +135,7 @@ const TrackOrder = () => {
               </div>
 
               <div className="pt-8 border-t border-slate-50">
-                <Link to="/our-product" className="w-full bg-slate-50 hover:bg-slate-100 text-slate-900 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 border border-slate-100">
+                <Link to="/products" className="w-full bg-slate-50 hover:bg-slate-100 text-slate-900 py-4 rounded-2xl font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2 border border-slate-100">
                   <ShoppingBag size={16} />
                   Continue Shopping
                 </Link>

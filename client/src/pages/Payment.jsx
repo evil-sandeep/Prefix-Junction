@@ -69,7 +69,7 @@ const Payment = () => {
       
       <main className="container mx-auto px-6 py-12 lg:py-20">
         <div className="flex items-center gap-4 mb-12">
-          <Link to="/address" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
+          <Link to="/checkout" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
             <ChevronLeft size={20} />
           </Link>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Payment</h1>

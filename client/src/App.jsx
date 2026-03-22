@@ -1,5 +1,9 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectCartItems } from './redux/cartSlice';
+import { selectCheckoutAddress } from './redux/checkoutSlice';
+
 import Home from './pages/Home';
 import Services from './pages/Services';
 import BookYourSlot from './pages/BookYourSlot';
@@ -15,6 +19,22 @@ import Payment from './pages/Payment';
 import OrderSuccess from './pages/OrderSuccess';
 import TrackOrder from './pages/TrackOrder';
 
+// Route Protectors
+const CartRequired = ({ children }) => {
+  const cartItems = useSelector(selectCartItems);
+  return cartItems.length > 0 ? children : <Navigate to="/products" />;
+};
+
+const AddressRequired = ({ children }) => {
+  const address = useSelector(selectCheckoutAddress);
+  const cartItems = useSelector(selectCartItems);
+  
+  if (cartItems.length === 0) return <Navigate to="/products" />;
+  if (!address.fullName.trim()) return <Navigate to="/checkout" />;
+  
+  return children;
+};
+
 function App() {
   console.log('App is rendering');
   return (
@@ -27,12 +47,27 @@ function App() {
         <Route path="/why-choose-us" element={<WhyChooseUs />} />
         <Route path="/our-services" element={<OurServices />} />
         <Route path="/holistic-care" element={<HolisticCare />} />
-        <Route path="/our-product" element={<OurProduct />} />
+        
+        {/* eCommerce Flow */}
+        <Route path="/products" element={<OurProduct />} />
+        <Route path="/our-product" element={<Navigate to="/products" replace />} />
         <Route path="/cart" element={<Cart />} />
-        <Route path="/address" element={<Address />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/order-success" element={<OrderSuccess />} />
-        <Route path="/track-order" element={<TrackOrder />} />
+        <Route path="/checkout" element={
+          <CartRequired>
+            <Address />
+          </CartRequired>
+        } />
+        <Route path="/address" element={<Navigate to="/checkout" replace />} />
+        <Route path="/payment" element={
+          <AddressRequired>
+            <Payment />
+          </AddressRequired>
+        } />
+        <Route path="/success" element={<OrderSuccess />} />
+        <Route path="/order-success" element={<Navigate to="/success" replace />} />
+        <Route path="/track" element={<TrackOrder />} />
+        <Route path="/track-order" element={<Navigate to="/track" replace />} />
+        
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>

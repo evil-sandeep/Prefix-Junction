@@ -34,7 +34,7 @@ const Cart = () => {
           </div>
           <h2 className="text-3xl font-black text-slate-900 mb-4">Your cart is empty</h2>
           <p className="text-slate-500 mb-10 max-w-md">Looks like you haven't added anything to your cart yet. Explore our premium products and find something special for your pet.</p>
-          <Link to="/our-product" className="bg-[#0F172A] text-white px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest hover:bg-slate-800 transition-all active:scale-95 shadow-xl">
+          <Link to="/products" className="bg-[#0F172A] text-white px-10 py-4 rounded-full font-black text-sm uppercase tracking-widest hover:bg-slate-800 transition-all active:scale-95 shadow-xl">
             Start Shopping
           </Link>
         </main>
@@ -49,7 +49,7 @@ const Cart = () => {
       
       <main className="container mx-auto px-6 py-12 lg:py-20">
         <div className="flex items-center gap-4 mb-12">
-          <Link to="/our-product" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
+          <Link to="/products" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
             <ChevronLeft size={20} />
           </Link>
           <h1 className="text-4xl font-black text-slate-900 tracking-tight">Shopping Cart</h1>
@@ -132,7 +132,7 @@ const Cart = () => {
               </div>
 
               <button 
-                onClick={() => navigate('/address')}
+                onClick={() => navigate('/checkout')}
                 className="w-full bg-[#38BDF8] hover:bg-[#7DD3FC] text-white py-5 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-[#38BDF8]/20 flex items-center justify-center gap-3"
               >
                 Proceed to Checkout
