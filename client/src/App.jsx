@@ -22,18 +22,21 @@ import Pricing from './pages/Pricing';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
+import Plans from './pages/Plans';
 
 // Route Protectors
 const CartRequired = ({ children }) => {
   const cartItems = useSelector(selectCartItems);
-  return cartItems.length > 0 ? children : <Navigate to="/products" />;
+  const selectedPlan = useSelector((state) => state.plan.selectedPlan);
+  return (cartItems.length > 0 || selectedPlan) ? children : <Navigate to="/products" />;
 };
 
 const AddressRequired = ({ children }) => {
   const address = useSelector(selectCheckoutAddress);
   const cartItems = useSelector(selectCartItems);
+  const selectedPlan = useSelector((state) => state.plan.selectedPlan);
   
-  if (cartItems.length === 0) return <Navigate to="/products" />;
+  if (cartItems.length === 0 && !selectedPlan) return <Navigate to="/products" />;
   if (!address.fullName.trim()) return <Navigate to="/checkout" />;
   
   return children;
@@ -79,7 +82,7 @@ function App() {
         
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/pricing" element={<Pricing />} />
-        <Route path="/plans" element={<Navigate to="/pricing" replace />} />
+        <Route path="/plans" element={<Plans />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/dashboard" element={

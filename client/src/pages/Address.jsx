@@ -3,13 +3,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { setAddress } from '../redux/checkoutSlice';
 import { selectCartItems, selectCartTotalAmount } from '../redux/cartSlice';
+import { selectSelectedPlan, selectPlanPrice } from '../redux/planSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { ChevronLeft, MapPin, Phone, User, Home, Building2, Landmark, ArrowRight, ShieldCheck } from 'lucide-react';
 
 const Address = () => {
   const cartItems = useSelector(selectCartItems);
-  const totalAmount = useSelector(selectCartTotalAmount);
+  const cartTotalAmount = useSelector(selectCartTotalAmount);
+  const selectedPlan = useSelector(selectSelectedPlan);
+  const planPrice = useSelector(selectPlanPrice);
+  
+  const totalAmount = selectedPlan ? Number(planPrice) : cartTotalAmount;
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -204,7 +209,20 @@ const Address = () => {
               <h2 className="text-2xl font-black mb-8 tracking-tight text-slate-900">Order Summary</h2>
               
               <div className="max-h-[300px] overflow-y-auto mb-8 pr-2 space-y-4 custom-scrollbar">
-                {cartItems.map((item) => (
+                {selectedPlan ? (
+                  <div className="flex gap-4 items-center">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-primary/10 flex items-center justify-center text-primary">
+                      <ShieldCheck size={32} />
+                    </div>
+                    <div className="flex-grow">
+                      <h4 className="text-sm font-bold text-slate-900 leading-tight mb-1">{selectedPlan} Plan</h4>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs text-slate-400 font-medium tracking-wide">Subscription</span>
+                        <span className="text-sm font-black text-slate-900 tracking-tight">₹{planPrice}</span>
+                      </div>
+                    </div>
+                  </div>
+                ) : cartItems.map((item) => (
                   <div key={item.productId} className="flex gap-4 items-center">
                     <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-50">
                       <img src={item.image} alt={item.name} className="w-full h-full object-cover" />

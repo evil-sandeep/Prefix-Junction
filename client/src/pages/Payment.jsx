@@ -1,42 +1,71 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { selectCartItems, selectCartTotalAmount } from '../redux/cartSlice';
 import { selectCheckoutAddress } from '../redux/checkoutSlice';
+import { selectSelectedPlan, selectPlanPrice, selectPlanId, clearSelectedPlan } from '../redux/planSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { ShieldCheck, CreditCard, ChevronLeft, Loader2, Info } from 'lucide-react';
 
 const Payment = () => {
+  const dispatch = useDispatch();
   const cartItems = useSelector(selectCartItems);
-  const totalAmount = useSelector(selectCartTotalAmount);
+  const cartTotalAmount = useSelector(selectCartTotalAmount);
+  const selectedPlan = useSelector(selectSelectedPlan);
+  const planId = useSelector(selectPlanId);
+  const planPrice = useSelector(selectPlanPrice);
   const address = useSelector(selectCheckoutAddress);
+  const { user, token } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+
+  const totalAmount = selectedPlan ? Number(planPrice) : cartTotalAmount;
 
   const handlePayment = async () => {
     setLoading(true);
     try {
       // 1. Create Order on Backend
-      const { data: order } = await axios.post('http://localhost:5000/api/payment/create-order', {
-        amount: totalAmount,
+      const apiEndpoint = selectedPlan 
+        ? 'http://localhost:5000/api/subscription/create-order' 
+        : 'http://localhost:5000/api/payment/create-order';
+      
+      const payload = selectedPlan 
+        ? { planId, billingCycle: planPrice < 1000 ? 'monthly' : 'yearly' }
+        : { amount: totalAmount };
+
+      const { data: orderData } = await axios.post(apiEndpoint, payload, {
+        headers: { Authorization: `Bearer ${token}` }
       });
+
+      const order = selectedPlan ? orderData.order : orderData;
 
       // 2. Open Razorpay Checkout
       const options = {
-        key: 'rzp_test_placeholder', // Should come from backend or env
+        key: 'rzp_test_placeholder',
         amount: order.amount,
         currency: order.currency,
         name: 'Petflix Junction',
-        description: 'Premium Pet Products',
-        image: 'https://i.ibb.co/vzNf5k0/petflix-logo.png', // Using the existing petflix logo
+        description: selectedPlan ? `${selectedPlan} Plan Subscription` : 'Premium Pet Products',
+        image: 'https://i.ibb.co/vzNf5k0/petflix-logo.png',
         order_id: order.id,
         handler: async (response) => {
           // 3. Verify Payment
           try {
-            const { data } = await axios.post('http://localhost:5000/api/payment/verify-payment', response);
-            if (data.success) {
+            const verifyEndpoint = selectedPlan 
+              ? 'http://localhost:5000/api/subscription/verify-payment' 
+              : 'http://localhost:5000/api/payment/verify-payment';
+            
+            const verifyPayload = selectedPlan 
+              ? { ...response, planId, billingCycle: planPrice < 1000 ? 'monthly' : 'yearly' }
+              : response;
+
+            const { data } = await axios.post(verifyEndpoint, verifyPayload, {
+              headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (data.success || data.status === 'success') {
+              if (selectedPlan) dispatch(clearSelectedPlan());
               navigate('/success', { state: { paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id, amount: totalAmount } });
             }
           } catch (err) {
@@ -125,7 +154,7 @@ const Payment = () => {
               
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between text-slate-400 font-medium">
-                  <span>Cart Amount</span>
+                  <span>{selectedPlan ? `${selectedPlan} Plan` : 'Order Amount'}</span>
                   <span className="text-white">₹{totalAmount}</span>
                 </div>
                 <div className="flex justify-between text-slate-400 font-medium">
