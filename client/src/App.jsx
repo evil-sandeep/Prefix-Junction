@@ -23,6 +23,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Plans from './pages/Plans';
+import SubscriptionCheckout from './pages/SubscriptionCheckout';
 
 // Route Protectors
 const CartRequired = ({ children }) => {
@@ -47,6 +48,11 @@ const AuthRequired = ({ children }) => {
   return user ? children : <Navigate to="/login" />;
 };
 
+const CheckoutRouter = () => {
+  const selectedPlan = useSelector((state) => state.plan.selectedPlan);
+  return selectedPlan ? <SubscriptionCheckout /> : <Address />;
+};
+
 function App() {
   console.log('App is rendering');
   return (
@@ -66,7 +72,7 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={
           <CartRequired>
-            <Address />
+            <CheckoutRouter />
           </CartRequired>
         } />
         <Route path="/address" element={<Navigate to="/checkout" replace />} />
