@@ -33,5 +33,6 @@ export const { setSelectedPlan, clearSelectedPlan } = planSlice.actions;
 
 export const selectSelectedPlan = (state) => state.plan.selectedPlan;
 export const selectPlanPrice = (state) => state.plan.price;
+export const selectPlanId = (state) => state.plan.planId;
 
 export default planSlice.reducer;
