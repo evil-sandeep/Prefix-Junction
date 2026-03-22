@@ -19,6 +19,9 @@ import Payment from './pages/Payment';
 import OrderSuccess from './pages/OrderSuccess';
 import TrackOrder from './pages/TrackOrder';
 import Pricing from './pages/Pricing';
+import Login from './pages/Login';
+import Register from './pages/Register';
+import Dashboard from './pages/Dashboard';
 
 // Route Protectors
 const CartRequired = ({ children }) => {
@@ -34,6 +37,11 @@ const AddressRequired = ({ children }) => {
   if (!address.fullName.trim()) return <Navigate to="/checkout" />;
   
   return children;
+};
+
+const AuthRequired = ({ children }) => {
+  const { user } = useSelector((state) => state.auth);
+  return user ? children : <Navigate to="/login" />;
 };
 
 function App() {
@@ -71,6 +79,14 @@ function App() {
         
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/plans" element={<Navigate to="/pricing" replace />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/dashboard" element={
+          <AuthRequired>
+            <Dashboard />
+          </AuthRequired>
+        } />
       </Routes>
     </Router>
   );

@@ -1,11 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectCartTotalQuantity } from '../redux/cartSlice';
-import { ShoppingCart, Mail, Phone, Clock } from 'lucide-react';
+import { selectUser, logout } from '../redux/authSlice';
+import { ShoppingCart, Mail, Phone, Clock, User, LogOut } from 'lucide-react';
 
 function Navbar() {
   const cartTotalQuantity = useSelector(selectCartTotalQuantity);
+  const user = useSelector(selectUser);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate('/login');
+  };
 
   return (
     <>
@@ -78,9 +86,24 @@ function Navbar() {
                 </span>
               )}
             </Link>
-            <Link to="/booking" className="bg-[#00d084] hover:bg-[#00b875] text-white px-7 py-2.5 rounded-full text-sm font-bold tracking-wider transition-all shadow-md hover:shadow-lg active:scale-95">
-              BOOK NOW
-            </Link>
+            
+            {user ? (
+              <div className="flex items-center gap-4">
+                <Link to="/dashboard" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-primary/10 hover:text-primary transition-all">
+                  <User size={20} />
+                </Link>
+                <button 
+                  onClick={handleLogout}
+                  className="hidden lg:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-all"
+                >
+                  <LogOut size={16} />
+                </button>
+              </div>
+            ) : (
+              <Link to="/login" className="bg-[#00d084] hover:bg-[#00b875] text-white px-7 py-2.5 rounded-full text-sm font-bold tracking-wider transition-all shadow-md hover:shadow-lg active:scale-95">
+                LOG IN
+              </Link>
+            )}
           </div>
         </div>
       </header>
