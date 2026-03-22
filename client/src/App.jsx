@@ -11,6 +11,8 @@ import AdminDashboard from './pages/AdminDashboard';
 import OurProduct from './pages/OurProduct';
 import Cart from './pages/Cart';
 import Address from './pages/Address';
+import Payment from './pages/Payment';
+import OrderSuccess from './pages/OrderSuccess';
 
 function App() {
   console.log('App is rendering');
@@ -27,6 +29,8 @@ function App() {
         <Route path="/our-product" element={<OurProduct />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/address" element={<Address />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>

@@ -7,6 +7,7 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 const bookingRoutes = require('./routes/bookingRoutes');
 const statRoutes = require('./routes/statRoutes');
+const paymentRoutes = require('./routes/paymentRoutes');
 
 // MongoDB Connection
 mongoose.connect(process.env.MONGODB_URI)
@@ -20,6 +21,7 @@ app.use(express.json());
 // Routes
 app.use('/api', bookingRoutes);
 app.use('/api/stats', statRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // Basic Route
 app.get('/', (req, res) => {

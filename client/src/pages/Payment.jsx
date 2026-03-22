@@ -1,0 +1,173 @@
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
+import { selectCartItems, selectCartTotalAmount } from '../redux/cartSlice';
+import { selectCheckoutAddress } from '../redux/checkoutSlice';
+import Navbar from './Navbar';
+import Footer from './Footer';
+import { ShieldCheck, CreditCard, ChevronLeft, Loader2, Info } from 'lucide-react';
+
+const Payment = () => {
+  const cartItems = useSelector(selectCartItems);
+  const totalAmount = useSelector(selectCartTotalAmount);
+  const address = useSelector(selectCheckoutAddress);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handlePayment = async () => {
+    setLoading(true);
+    try {
+      // 1. Create Order on Backend
+      const { data: order } = await axios.post('http://localhost:5000/api/payment/create-order', {
+        amount: totalAmount,
+      });
+
+      // 2. Open Razorpay Checkout
+      const options = {
+        key: 'rzp_test_placeholder', // Should come from backend or env
+        amount: order.amount,
+        currency: order.currency,
+        name: 'Petflix Junction',
+        description: 'Premium Pet Products',
+        image: 'https://placeholder.com/logo.png', // Ideally a real logo URL
+        order_id: order.id,
+        handler: async (response) => {
+          // 3. Verify Payment
+          try {
+            const { data } = await axios.post('http://localhost:5000/api/payment/verify-payment', response);
+            if (data.success) {
+              navigate('/order-success', { state: { paymentId: response.razorpay_payment_id, amount: totalAmount } });
+            }
+          } catch (err) {
+            console.error('Verification failed', err);
+            alert('Payment verification failed. Please contact support.');
+          }
+        },
+        prefill: {
+          name: address.fullName,
+          contact: address.phone,
+        },
+        theme: {
+          color: '#0F172A',
+        },
+      };
+
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      console.error('Payment initialization failed', error);
+      alert('Could not initialize payment. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#f8fafc] font-['Outfit']">
+      <Navbar />
+      
+      <main className="container mx-auto px-6 py-12 lg:py-20">
+        <div className="flex items-center gap-4 mb-12">
+          <Link to="/address" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
+            <ChevronLeft size={20} />
+          </Link>
+          <h1 className="text-4xl font-black text-slate-900 tracking-tight">Payment</h1>
+        </div>
+
+        <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+          {/* Payment Method & Summary */}
+          <div className="space-y-8">
+            <div className="bg-white rounded-[40px] p-8 border border-slate-100 shadow-sm">
+              <h2 className="text-xl font-black text-slate-900 mb-6 flex items-center gap-2">
+                <CreditCard size={24} className="text-[#38BDF8]" />
+                Payment Method
+              </h2>
+              
+              <div className="p-6 rounded-2xl bg-slate-50 border border-[#38BDF8]/20 flex items-center justify-between group cursor-pointer">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/89/Razorpay_logo.svg" alt="Razorpay" className="w-8" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-slate-900">Razorpay UPI / Cards</h4>
+                    <p className="text-xs text-slate-400 font-medium">Fast & Secure Payment</p>
+                  </div>
+                </div>
+                <div className="w-6 h-6 rounded-full border-2 border-[#38BDF8] flex items-center justify-center">
+                  <div className="w-3 h-3 bg-[#38BDF8] rounded-full" />
+                </div>
+              </div>
+
+              <div className="mt-8 p-6 rounded-2xl bg-amber-50 border border-amber-100 flex gap-4">
+                <Info size={24} className="text-amber-500 flex-shrink-0" />
+                <p className="text-xs text-amber-700 font-medium leading-relaxed">
+                  You will be redirected to Razorpay's secure payment gateway to complete your transaction.
+                </p>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-[40px] p-8 border border-slate-100 shadow-sm">
+              <h2 className="text-xl font-black text-slate-900 mb-6">Delivery Address</h2>
+              <div className="text-sm font-medium text-slate-500 leading-relaxed">
+                <p className="font-black text-slate-900 mb-1">{address.fullName}</p>
+                <p>{address.addressLine}</p>
+                <p>{address.city}, {address.state} - {address.pincode}</p>
+                <p className="mt-2 text-slate-900">+91 {address.phone}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Final Totals */}
+          <div>
+            <div className="bg-[#0F172A] rounded-[40px] p-10 text-white shadow-2xl shadow-slate-900/20 lg:sticky lg:top-24">
+              <h2 className="text-2xl font-black mb-8 tracking-tight">Final Summary</h2>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between text-slate-400 font-medium">
+                  <span>Cart Amount</span>
+                  <span className="text-white">₹{totalAmount}</span>
+                </div>
+                <div className="flex justify-between text-slate-400 font-medium">
+                  <span>Delivery Charges</span>
+                  <span className="text-emerald-400 uppercase text-xs font-black self-center">Free</span>
+                </div>
+              </div>
+
+              <div className="pt-8 border-t border-white/10 mb-10 text-center">
+                <p className="text-slate-400 font-bold uppercase tracking-widest text-[10px] mb-2">Grand Total</p>
+                <p className="text-5xl font-black text-[#38BDF8] tracking-tighter">₹{totalAmount}</p>
+              </div>
+
+              <button 
+                onClick={handlePayment}
+                disabled={loading}
+                className="w-full bg-[#38BDF8] hover:bg-[#7DD3FC] text-white py-6 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-[#38BDF8]/20 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 size={20} className="animate-spin" />
+                    Processing...
+                  </>
+                ) : (
+                  <>
+                    Confirm & Pay
+                    <ShieldCheck size={20} />
+                  </>
+                )}
+              </button>
+
+              <div className="mt-8 flex items-center justify-center gap-6 opacity-40 text-white">
+                <p className="text-[10px] font-bold uppercase tracking-widest">Secure Payments via Razorpay</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
+};
+
+export default Payment;
