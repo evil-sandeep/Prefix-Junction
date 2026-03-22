@@ -13,6 +13,7 @@ import Cart from './pages/Cart';
 import Address from './pages/Address';
 import Payment from './pages/Payment';
 import OrderSuccess from './pages/OrderSuccess';
+import TrackOrder from './pages/TrackOrder';
 
 function App() {
   console.log('App is rendering');
@@ -31,6 +32,7 @@ function App() {
         <Route path="/address" element={<Address />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/track-order" element={<TrackOrder />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>

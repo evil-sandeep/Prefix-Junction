@@ -87,10 +87,10 @@ const OrderSuccess = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-5">
-            <button className="flex-1 bg-[#0F172A] hover:bg-slate-800 text-white py-5 rounded-3xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl flex items-center justify-center gap-3 group">
+            <Link to="/track-order" className="flex-1 bg-[#0F172A] hover:bg-slate-800 text-white py-5 rounded-3xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl flex items-center justify-center gap-3 group">
               Track Order
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-            </button>
+            </Link>
             <Link to="/our-product" className="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-900 py-5 rounded-3xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 flex items-center justify-center gap-3">
               <ShoppingBag size={18} />
               Continue Shopping
