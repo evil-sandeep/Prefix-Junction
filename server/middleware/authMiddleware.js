@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-module.exports = async (req, res, next) => {
+exports.protect = async (req, res, next) => {
   try {
     // 1) Getting token and check of it's there
     let token;
