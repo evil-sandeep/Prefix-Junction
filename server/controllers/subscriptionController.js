@@ -2,6 +2,7 @@ const Razorpay = require('razorpay');
 const crypto = require('crypto');
 const User = require('../models/User');
 const Plan = require('../models/Plan');
+const Payment = require('../models/Payment');
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -72,8 +73,19 @@ exports.verifySubscriptionPayment = async (req, res) => {
         }
       });
 
+      // Save payment info in DB
+      await Payment.create({
+        userId: req.user._id,
+        planId,
+        razorpay_order_id,
+        razorpay_payment_id,
+        amount: billingCycle === 'yearly' ? plan.priceYearly : plan.priceMonthly,
+        billingCycle
+      });
+
       res.status(200).json({
         status: 'success',
+        success: true, // For frontend compatibility
         message: "Subscription activated successfully"
       });
     } else {

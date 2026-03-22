@@ -6,7 +6,9 @@ import { selectCheckoutAddress } from '../redux/checkoutSlice';
 import { selectSelectedPlan, selectPlanPrice, selectPlanId, clearSelectedPlan } from '../redux/planSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { ShieldCheck, CreditCard, ChevronLeft, Loader2, Info } from 'lucide-react';
+import { ShieldCheck, CreditCard, ChevronLeft, Loader2, Info, ArrowRight } from 'lucide-react';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
 const Payment = () => {
   const dispatch = useDispatch();
@@ -27,11 +29,11 @@ const Payment = () => {
     try {
       // 1. Create Order on Backend
       const apiEndpoint = selectedPlan 
-        ? 'http://localhost:5000/api/subscription/create-order' 
-        : 'http://localhost:5000/api/payment/create-order';
+        ? `${API_BASE_URL}/api/subscription/create-order` 
+        : `${API_BASE_URL}/api/payment/create-order`;
       
       const payload = selectedPlan 
-        ? { planId, billingCycle: planPrice < 1000 ? 'monthly' : 'yearly' }
+        ? { planId, billingCycle: totalAmount > 1000 ? 'yearly' : 'monthly' }
         : { amount: totalAmount };
 
       const { data: orderData } = await axios.post(apiEndpoint, payload, {
@@ -42,7 +44,7 @@ const Payment = () => {
 
       // 2. Open Razorpay Checkout
       const options = {
-        key: 'rzp_test_placeholder',
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_test_placeholder',
         amount: order.amount,
         currency: order.currency,
         name: 'Petflix Junction',
@@ -53,11 +55,11 @@ const Payment = () => {
           // 3. Verify Payment
           try {
             const verifyEndpoint = selectedPlan 
-              ? 'http://localhost:5000/api/subscription/verify-payment' 
-              : 'http://localhost:5000/api/payment/verify-payment';
+              ? `${API_BASE_URL}/api/subscription/verify-payment` 
+              : `${API_BASE_URL}/api/payment/verify-payment`;
             
             const verifyPayload = selectedPlan 
-              ? { ...response, planId, billingCycle: planPrice < 1000 ? 'monthly' : 'yearly' }
+              ? { ...response, planId, billingCycle: totalAmount > 1000 ? 'yearly' : 'monthly' }
               : response;
 
             const { data } = await axios.post(verifyEndpoint, verifyPayload, {
@@ -154,11 +156,24 @@ const Payment = () => {
               
               <div className="space-y-4 mb-8">
                 <div className="flex justify-between text-slate-400 font-medium">
-                  <span>{selectedPlan ? `${selectedPlan} Plan` : 'Order Amount'}</span>
+                  <span className="flex items-center gap-2">
+                    {selectedPlan ? (
+                      <>
+                        <ShieldCheck size={16} className="text-primary" />
+                        {selectedPlan} Plan
+                      </>
+                    ) : 'Order Amount'}
+                  </span>
                   <span className="text-white">₹{totalAmount}</span>
                 </div>
+                {selectedPlan && (
+                  <div className="flex justify-between text-slate-400 text-xs font-bold uppercase tracking-widest pl-6">
+                    <span>Billing cycle</span>
+                    <span className="text-primary">{totalAmount > 1000 ? 'Yearly' : 'Monthly'}</span>
+                  </div>
+                )}
                 <div className="flex justify-between text-slate-400 font-medium">
-                  <span>Delivery Charges</span>
+                  <span>Processing Fees</span>
                   <span className="text-emerald-400 uppercase text-xs font-black self-center">Free</span>
                 </div>
               </div>
@@ -171,7 +186,7 @@ const Payment = () => {
               <button 
                 onClick={handlePayment}
                 disabled={loading}
-                className="w-full bg-[#38BDF8] hover:bg-[#7DD3FC] text-white py-6 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl shadow-[#38BDF8]/20 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-[#38BDF8] hover:bg-[#7DD3FC] text-white py-6 rounded-2xl font-black text-xs uppercase tracking-[0.3em] transition-all active:scale-95 shadow-xl shadow-[#38BDF8]/20 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? (
                   <>
@@ -180,8 +195,8 @@ const Payment = () => {
                   </>
                 ) : (
                   <>
-                    Confirm & Pay
-                    <ShieldCheck size={20} />
+                    Pay Now
+                    <ArrowRight size={20} />
                   </>
                 )}
               </button>
