@@ -15,7 +15,7 @@ const SubscriptionCheckout = () => {
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
-    fullName: user?.fullName || '',
+    fullName: user?.name || '',
     email: user?.email || '',
     phone: user?.phone || '',
   });

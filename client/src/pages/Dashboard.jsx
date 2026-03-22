@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { logout } from '../redux/authSlice';
+import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { 
@@ -19,9 +20,30 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, token } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+        const { data } = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+        // We could update Redux here, but for now we'll just let the middleware do its job 
+        // and rely on the fact that if it changed, it's saved in DB.
+        // Actually, let's update Redux to show the latest status.
+        dispatch({ type: 'auth/login/fulfilled', payload: data });
+      } catch (err) {
+        console.error('Failed to fetch user', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    if (user) fetchUser();
+  }, [user, token, dispatch]);
 
   const onLogout = () => {
     dispatch(logout());
@@ -43,7 +65,7 @@ const Dashboard = () => {
                 <div className="w-24 h-24 bg-primary/10 rounded-3xl flex items-center justify-center text-primary mb-6 shadow-inner">
                   <User size={48} />
                 </div>
-                <h2 className="text-2xl font-black text-slate-900 mb-1">{user.fullName}</h2>
+                <h2 className="text-2xl font-black text-slate-900 mb-1">{user.name}</h2>
                 <p className="text-sm font-bold text-slate-400 uppercase tracking-widest">{user.email}</p>
                 
                 <div className="mt-8 w-full pt-8 border-t border-slate-50 space-y-2">

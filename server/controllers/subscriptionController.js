@@ -65,6 +65,11 @@ exports.verifySubscriptionPayment = async (req, res) => {
       expiryDate.setDate(expiryDate.getDate() + durationDays);
 
       await User.findByIdAndUpdate(req.user._id, {
+        plan: plan.name,
+        paymentId: razorpay_payment_id,
+        orderId: razorpay_order_id,
+        planStartDate: new Date(),
+        planExpiryDate: expiryDate,
         subscription: {
           planId,
           startDate: new Date(),

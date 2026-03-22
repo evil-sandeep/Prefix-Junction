@@ -10,8 +10,9 @@ const signToken = id => {
 exports.register = async (req, res) => {
   try {
     const newUser = await User.create({
-      fullName: req.body.fullName,
+      name: req.body.name || req.body.fullName, // Support both for now to avoid breaking frontend immediately
       email: req.body.email,
+      phone: req.body.phone,
       password: req.body.password
     });
 

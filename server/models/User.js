@@ -2,9 +2,9 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  fullName: {
+  name: {
     type: String,
-    required: [true, 'Please provide your full name'],
+    required: [true, 'Please provide your name'],
     trim: true
   },
   email: {
@@ -14,12 +14,25 @@ const userSchema = new mongoose.Schema({
     lowercase: true,
     trim: true
   },
+  phone: {
+    type: String,
+    trim: true
+  },
   password: {
     type: String,
     required: [true, 'Please provide a password'],
     minlength: 6,
     select: false
   },
+  plan: {
+    type: String,
+    enum: ['Starter', 'Premium', 'Elite'],
+    default: 'Starter'
+  },
+  paymentId: String,
+  orderId: String,
+  planStartDate: Date,
+  planExpiryDate: Date,
   subscription: {
     planId: {
       type: mongoose.Schema.ObjectId,

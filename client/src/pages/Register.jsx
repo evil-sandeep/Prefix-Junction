@@ -8,13 +8,14 @@ import { User, Mail, Lock, Loader2, UserPlus, ChevronRight, AlertCircle } from '
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    fullName: '',
+    name: '',
     email: '',
+    phone: '',
     password: '',
     confirmPassword: '',
   });
 
-  const { fullName, email, password, confirmPassword } = formData;
+  const { name, email, phone, password, confirmPassword } = formData;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -43,7 +44,7 @@ const Register = () => {
     if (password !== confirmPassword) {
       alert('Passwords do not match');
     } else {
-      dispatch(register({ fullName, email, password }));
+      dispatch(register({ name, email, phone, password }));
     }
   };
 
@@ -76,12 +77,28 @@ const Register = () => {
                   <User className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
                   <input
                     type="text"
-                    name="fullName"
-                    value={fullName}
+                    name="name"
+                    value={name}
                     onChange={onChange}
                     required
                     placeholder="John Doe"
                     className="w-full bg-slate-50 border-none rounded-2xl py-5 pl-14 pr-6 text-slate-900 placeholder:text-slate-300 focus:ring-2 focus:ring-primary/20 transition-all font-medium"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-xs font-black uppercase tracking-widest text-slate-400 ml-4">Phone Number</label>
+                <div className="relative">
+                  <span className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-400 font-bold px-1">+91</span>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={phone}
+                    onChange={onChange}
+                    required
+                    placeholder="00000 00000"
+                    className="w-full bg-slate-50 border-none rounded-2xl py-5 pl-16 pr-6 text-slate-900 placeholder:text-slate-300 focus:ring-2 focus:ring-primary/20 transition-all font-medium"
                   />
                 </div>
               </div>
