@@ -119,19 +119,29 @@ const Dashboard = () => {
                   <h4 className="text-xs font-black uppercase tracking-[0.2em] text-primary mb-4">Current Subscription</h4>
                   <div className="flex items-center gap-4 mb-4">
                     <h2 className="text-4xl font-black text-slate-900 tracking-tight">
-                      {user.subscription?.status === 'active' ? 'Elite Plan' : 'Free Member'}
+                      {!user?.plan || user?.plan === 'Starter' ? 'Free Member' : `${user?.plan} Member`}
                     </h2>
-                    {user.subscription?.status === 'active' && (
+                    {user?.plan && user?.plan !== 'Starter' && (
                       <span className="bg-emerald-100 text-emerald-600 text-[10px] font-black uppercase px-3 py-1 rounded-full tracking-widest border border-emerald-200">
                         Active
                       </span>
                     )}
                   </div>
-                  <p className="text-slate-500 font-medium max-w-md">
-                    {user.subscription?.status === 'active' 
-                      ? 'You are enjoying full access to all premium services and priority grooming.' 
-                      : 'Upgrade to a premium plan to unlock exclusive grooming services and priority booking.'}
-                  </p>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-slate-500 font-medium max-w-md">
+                      {user?.plan && user?.plan !== 'Starter'
+                        ? `You are enjoying full access to all ${user?.plan} features and priority grooming.` 
+                        : 'Upgrade to a premium plan to unlock exclusive grooming services and priority booking.'}
+                    </p>
+                    {user?.planExpiryDate && user?.plan !== 'Starter' && (
+                      <div className="flex items-center gap-2 mt-2">
+                        <Clock size={14} className="text-slate-400" />
+                        <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">
+                          Expires on: {new Date(user?.planExpiryDate).toLocaleDateString()}
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
                 
                 <Link 
@@ -144,7 +154,7 @@ const Dashboard = () => {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               <div className="bg-white rounded-[40px] p-8 border border-slate-100 shadow-sm">
                 <div className="flex items-center gap-4 mb-6">
                   <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center text-blue-500">
@@ -170,8 +180,51 @@ const Dashboard = () => {
                   <h3 className="text-lg font-black text-slate-900">Recent Transactions</h3>
                 </div>
                 <div className="space-y-4 text-center py-10 border-2 border-dashed border-slate-50 rounded-3xl">
-                  <p className="text-slate-400 font-bold text-sm">No recent activity</p>
+                  {user?.paymentId ? (
+                    <div className="text-left px-4">
+                       <p className="text-xs font-black text-slate-400 uppercase mb-1">Last Payment</p>
+                       <p className="text-sm font-bold text-slate-900">ID: {user.paymentId}</p>
+                       <p className="text-[10px] text-emerald-500 font-bold uppercase mt-1">Status: Success</p>
+                    </div>
+                  ) : (
+                    <p className="text-slate-400 font-bold text-sm">No recent activity</p>
+                  )}
                 </div>
+              </div>
+
+              <div className={`bg-white rounded-[40px] p-8 border border-slate-100 shadow-sm relative overflow-hidden ${user?.plan !== 'Elite' ? 'group' : ''}`}>
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="w-12 h-12 bg-purple-50 rounded-2xl flex items-center justify-center text-purple-500">
+                    <TrendingUp size={24} />
+                  </div>
+                  <h3 className="text-lg font-black text-slate-900">Advanced Analytics</h3>
+                </div>
+                
+                {user?.plan === 'Elite' ? (
+                  <div className="space-y-4">
+                    <div className="p-4 bg-slate-50 rounded-2xl">
+                      <p className="text-xs font-bold text-slate-400 uppercase mb-1">Care Continuity</p>
+                      <div className="h-2 bg-slate-200 rounded-full overflow-hidden">
+                        <div className="w-3/4 h-full bg-primary" />
+                      </div>
+                    </div>
+                    <p className="text-[10px] font-bold text-slate-400 uppercase text-center mt-4">More stats coming soon...</p>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <div className="space-y-4 blur-[4px] select-none">
+                      <div className="p-4 bg-slate-50 rounded-2xl">
+                        <p className="text-xs font-bold text-slate-400 uppercase mb-1">Mock Stat</p>
+                        <div className="h-2 bg-slate-200 rounded-full" />
+                      </div>
+                    </div>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
+                      <ShieldCheck size={32} className="text-primary mb-3" />
+                      <p className="text-xs font-black text-slate-900 uppercase tracking-widest mb-1">Elite Exclusive</p>
+                      <Link to="/plans" className="text-[10px] font-black text-primary hover:underline uppercase">Upgrade Now</Link>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
