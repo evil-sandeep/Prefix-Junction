@@ -37,7 +37,7 @@ const Payment = () => {
           try {
             const { data } = await axios.post('http://localhost:5000/api/payment/verify-payment', response);
             if (data.success) {
-              navigate('/order-success', { state: { paymentId: response.razorpay_payment_id, amount: totalAmount } });
+              navigate('/order-success', { state: { paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id, amount: totalAmount } });
             }
           } catch (err) {
             console.error('Verification failed', err);
