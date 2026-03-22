@@ -30,14 +30,14 @@ const Payment = () => {
         currency: order.currency,
         name: 'Petflix Junction',
         description: 'Premium Pet Products',
-        image: 'https://placeholder.com/logo.png', // Ideally a real logo URL
+        image: 'https://i.ibb.co/vzNf5k0/petflix-logo.png', // Using the existing petflix logo
         order_id: order.id,
         handler: async (response) => {
           // 3. Verify Payment
           try {
             const { data } = await axios.post('http://localhost:5000/api/payment/verify-payment', response);
             if (data.success) {
-              navigate('/order-success', { state: { paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id, amount: totalAmount } });
+              navigate('/success', { state: { paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id, amount: totalAmount } });
             }
           } catch (err) {
             console.error('Verification failed', err);

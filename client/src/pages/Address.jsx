@@ -5,7 +5,7 @@ import { setAddress } from '../redux/checkoutSlice';
 import { selectCartItems, selectCartTotalAmount } from '../redux/cartSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { ChevronLeft, MapPin, Phone, User, Home, City, Landmark, ArrowRight, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, MapPin, Phone, User, Home, Building2, Landmark, ArrowRight, ShieldCheck } from 'lucide-react';
 
 const Address = () => {
   const cartItems = useSelector(selectCartItems);
@@ -136,7 +136,7 @@ const Address = () => {
                   {/* City */}
                   <div className="space-y-2">
                     <label className="text-sm font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                      <City size={14} className="text-[#38BDF8]" />
+                      <Building2 size={14} className="text-[#38BDF8]" />
                       City
                     </label>
                     <input
