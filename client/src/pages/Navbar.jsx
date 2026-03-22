@@ -39,10 +39,10 @@ function Navbar() {
           {/* Logo */}
           <Link to="/" className="flex flex-col items-center">
             <svg width="40" height="40" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-1">
-              <path d="M50 85C50 85 20 60 20 40C20 25 35 15 50 30C65 15 80 25 80 40C80 60 50 85 50 85Z" stroke="#ff6b6b" strokeWidth="4" fill="transparent"/>
-              <path d="M40 45C40 45 45 55 50 55C55 55 60 45 60 45" stroke="#ff6b6b" strokeWidth="4" strokeLinecap="round"/>
-              <circle cx="35" cy="35" r="4" fill="#ff6b6b"/>
-              <circle cx="65" cy="35" r="4" fill="#ff6b6b"/>
+              <path d="M50 85C50 85 20 60 20 40C20 25 35 15 50 30C65 15 80 25 80 40C80 60 50 85 50 85Z" stroke="#ff6b6b" strokeWidth="4" fill="transparent" />
+              <path d="M40 45C40 45 45 55 50 55C55 55 60 45 60 45" stroke="#ff6b6b" strokeWidth="4" strokeLinecap="round" />
+              <circle cx="35" cy="35" r="4" fill="#ff6b6b" />
+              <circle cx="65" cy="35" r="4" fill="#ff6b6b" />
             </svg>
             <span className="text-[11px] font-bold tracking-[2px] text-[#ff6b6b]">PETFLIX JUNCTION</span>
           </Link>
@@ -53,7 +53,18 @@ function Navbar() {
             <Link to="/services" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">SERVICES</Link>
             <Link to="/products" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">OUR PRODUCTS</Link>
             <Link to="/booking" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">BOOKING</Link>
-            <a href="/#pricing" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">PRICING</a>
+            <Link 
+              to="/pricing" 
+              className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide"
+              onClick={(e) => {
+                if (window.location.hash === '#/') {
+                  e.preventDefault();
+                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
+            >
+              PRICING
+            </Link>
             <Link to="/about" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">ABOUT US</Link>
           </nav>
 

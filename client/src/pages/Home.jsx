@@ -13,6 +13,7 @@ import BeforeAndAfter from './BeforeAndAfter';
 import OurWork from './OurWork';
 import ClientsReview from './ClientsReview';
 import ContactUs from './ContactUs';
+import { PricingSection } from './Pricing';
 import Map from './Map';
 
 function Home() {
@@ -27,6 +28,7 @@ function Home() {
       <GlimpseOfOurSalon />
       <BeforeAndAfter />
       <OurWork />
+      <PricingSection />
       <ClientsReview />
       <ContactUs />
       <Map />

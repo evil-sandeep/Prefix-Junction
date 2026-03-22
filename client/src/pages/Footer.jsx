@@ -11,9 +11,15 @@ function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           {/* About Column */}
           <div className="space-y-8">
-            <div className="flex items-center gap-3 bg-white px-4 py-2 rounded-xl w-fit">
-              <img src="https://i.ibb.co/vzNf5k0/petflix-logo.png" alt="Petflix" className="h-10" />
-            </div>
+            <Link to="/" className="flex flex-col items-center bg-white px-4 py-2 rounded-xl w-fit group">
+              <svg width="32" height="32" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-1 group-hover:scale-110 transition-transform">
+                <path d="M50 85C50 85 20 60 20 40C20 25 35 15 50 30C65 15 80 25 80 40C80 60 50 85 50 85Z" stroke="#ff6b6b" strokeWidth="4" fill="transparent" />
+                <path d="M40 45C40 45 45 55 50 55C55 55 60 45 60 45" stroke="#ff6b6b" strokeWidth="4" strokeLinecap="round" />
+                <circle cx="35" cy="35" r="4" fill="#ff6b6b" />
+                <circle cx="65" cy="35" r="4" fill="#ff6b6b" />
+              </svg>
+              <span className="text-[10px] font-black tracking-[2px] text-[#ff6b6b]">PETFLIX JUNCTION</span>
+            </Link>
             <div>
               <h4 className="text-white text-lg font-bold mb-6 relative w-fit after:content-[''] after:absolute after:-bottom-2 after:left-0 after:w-8 after:h-1 after:bg-primary italic">About Us</h4>
               <p className="leading-[1.8] text-[16px]">

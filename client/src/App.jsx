@@ -18,6 +18,7 @@ import Address from './pages/Address';
 import Payment from './pages/Payment';
 import OrderSuccess from './pages/OrderSuccess';
 import TrackOrder from './pages/TrackOrder';
+import Pricing from './pages/Pricing';
 
 // Route Protectors
 const CartRequired = ({ children }) => {
@@ -69,6 +70,7 @@ function App() {
         <Route path="/track-order" element={<Navigate to="/track" replace />} />
         
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/pricing" element={<Pricing />} />
       </Routes>
     </Router>
   );
