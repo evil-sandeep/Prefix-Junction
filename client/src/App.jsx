@@ -10,6 +10,7 @@ import HolisticCare from './pages/HolisticCare';
 import AdminDashboard from './pages/AdminDashboard';
 import OurProduct from './pages/OurProduct';
 import Cart from './pages/Cart';
+import Address from './pages/Address';
 
 function App() {
   console.log('App is rendering');
@@ -25,6 +26,7 @@ function App() {
         <Route path="/holistic-care" element={<HolisticCare />} />
         <Route path="/our-product" element={<OurProduct />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/address" element={<Address />} />
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </Router>
