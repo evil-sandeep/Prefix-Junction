@@ -93,9 +93,11 @@ function App() {
         } />
         <Route path="/address" element={<Navigate to="/checkout" replace />} />
         <Route path="/payment" element={
-          <AddressRequired>
-            <Payment />
-          </AddressRequired>
+          <AuthRequired>
+            <AddressRequired>
+              <Payment />
+            </AddressRequired>
+          </AuthRequired>
         } />
         <Route path="/success" element={<OrderSuccess />} />
         <Route path="/order-success" element={<Navigate to="/success" replace />} />

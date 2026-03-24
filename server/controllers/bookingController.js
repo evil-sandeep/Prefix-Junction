@@ -49,6 +49,26 @@ exports.getBookings = async (req, res) => {
     });
   }
 };
+
+exports.getMyBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({ 
+      email: { $regex: new RegExp(`^${req.user.email}$`, 'i') } 
+    }).sort({ createdAt: -1 });
+    res.status(200).json({
+      success: true,
+      count: bookings.length,
+      bookings
+    });
+  } catch (error) {
+    console.error('Error fetching my bookings:', error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch your bookings",
+      error: error.message
+    });
+  }
+};
 exports.updateBookingStatus = async (req, res) => {
   try {
     const { id } = req.params;

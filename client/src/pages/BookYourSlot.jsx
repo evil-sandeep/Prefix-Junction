@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
@@ -6,6 +7,8 @@ import { jsPDF } from 'jspdf';
 import emailjs from '@emailjs/browser';
 
 function BookYourSlot() {
+  const { user } = useSelector((state) => state.auth || {});
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -22,6 +25,21 @@ function BookYourSlot() {
     bookingId: null,
     bookingData: null
   });
+
+  // Prefill form if user is logged in
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || ''
+      }));
+    }
+  }, [user]);
+
+  // Prevent past dates
+  const today = new Date().toISOString().split('T')[0];
 
   const handleChange = (e) => {
     setFormData({
@@ -316,6 +334,7 @@ function BookYourSlot() {
                       type="date" 
                       name="date"
                       required
+                      min={today}
                       value={formData.date}
                       onChange={handleChange}
                       className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all text-gray-700 uppercase text-xs font-bold tracking-widest"

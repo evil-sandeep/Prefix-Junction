@@ -62,6 +62,10 @@ export const authSlice = createSlice({
       localStorage.removeItem('user');
       state.user = null;
       state.token = null;
+      state.isSuccess = false;
+      state.isError = false;
+      state.isLoading = false;
+      state.message = '';
     },
   },
   extraReducers: (builder) => {

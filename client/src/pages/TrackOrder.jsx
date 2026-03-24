@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { selectCartItems, selectCartTotalAmount } from '../redux/cartSlice';
 import { selectCheckoutAddress } from '../redux/checkoutSlice';
 import Navbar from './Navbar';
@@ -13,22 +13,44 @@ import {
   ChevronLeft, 
   Clock, 
   MapPin, 
-  CreditCard,
   ShoppingBag
 } from 'lucide-react';
 
 const TrackOrder = () => {
-  const cartItems = useSelector(selectCartItems);
-  const totalAmount = useSelector(selectCartTotalAmount);
-  const address = useSelector(selectCheckoutAddress);
+  const location = useLocation();
+  const histOrder = location.state?.order;
 
-  const steps = [
-    { title: 'Order Placed', date: 'March 22, 2024 - 05:30 PM', icon: <Package size={20} />, status: 'completed' },
-    { title: 'Confirmed', date: 'March 22, 2024 - 06:15 PM', icon: <CheckCircle size={20} />, status: 'completed' },
-    { title: 'Shipped', date: 'March 23, 2024 - 10:00 AM', icon: <Truck size={20} />, status: 'current' },
-    { title: 'Out for Delivery', date: 'Expected tomorrow', icon: <Truck size={20} />, status: 'pending' },
-    { title: 'Delivered', date: 'Expected March 25', icon: <Home size={20} />, status: 'pending' },
-  ];
+  // Fallback to redux slices if arriving right after checkout
+  const reduxCartItems = useSelector(selectCartItems);
+  const reduxTotalAmount = useSelector(selectCartTotalAmount);
+  const reduxAddress = useSelector(selectCheckoutAddress);
+
+  const displayItems = histOrder ? histOrder.items : reduxCartItems;
+  const displayTotal = histOrder ? histOrder.totalAmount : reduxTotalAmount;
+  const displayAddress = histOrder ? histOrder.address : reduxAddress;
+  const orderDateObj = histOrder ? new Date(histOrder.createdAt) : new Date();
+
+  const currentStatus = histOrder?.deliveryStatus || 'processing';
+
+  const steps = useMemo(() => {
+     const statusLevels = ['processing', 'shipped', 'out_for_delivery', 'delivered'];
+     const currentIndex = statusLevels.indexOf(currentStatus);
+     
+     const resolveState = (levelIdx) => {
+       if (currentStatus === 'cancelled') return 'pending';
+       if (currentIndex > levelIdx) return 'completed';
+       if (currentIndex === levelIdx) return 'current';
+       return 'pending';
+     };
+
+     return [
+       { title: 'Order Placed', date: orderDateObj.toLocaleString(), icon: <Package size={20} />, status: 'completed' },
+       { title: 'Processing', date: currentStatus === 'processing' ? 'In Progress' : 'Confirmed', icon: <CheckCircle size={20} />, status: resolveState(0) },
+       { title: 'Shipped', date: 'Dispatched to Courier', icon: <Truck size={20} />, status: resolveState(1) },
+       { title: 'Out for Delivery', date: 'Arriving Soon', icon: <Truck size={20} />, status: resolveState(2) },
+       { title: 'Delivered', date: 'Complete', icon: <Home size={20} />, status: resolveState(3) },
+     ];
+  }, [currentStatus, orderDateObj]);
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Outfit']">
@@ -37,10 +59,10 @@ const TrackOrder = () => {
       <main className="container mx-auto px-6 py-12 lg:py-20">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
           <div className="flex items-center gap-4">
-            <Link to="/products" className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
+            <button onClick={() => window.history.back()} className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-slate-900 shadow-sm border border-slate-100 hover:bg-slate-50 transition-all">
               <ChevronLeft size={20} />
-            </Link>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight">Track Order</h1>
+            </button>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight">Track Order {histOrder && <span className="text-slate-300 text-2xl ml-2">#{histOrder._id.slice(-6).toUpperCase()}</span>}</h1>
           </div>
           <div className="flex items-center gap-3 bg-white px-6 py-3 rounded-2xl shadow-sm border border-slate-100">
             <Clock size={18} className="text-[#38BDF8]" />
@@ -100,10 +122,10 @@ const TrackOrder = () => {
               <h2 className="text-2xl font-black mb-8 tracking-tight">Order Snapshot</h2>
               
               <div className="space-y-6 mb-8 max-h-[250px] overflow-y-auto pr-2 custom-scrollbar">
-                {cartItems.map((item) => (
-                  <div key={item.productId} className="flex gap-4 items-center">
+                {displayItems.map((item, idx) => (
+                  <div key={item.productId || idx} className="flex gap-4 items-center">
                     <div className="w-14 h-14 rounded-xl overflow-hidden flex-shrink-0 bg-white/10 p-1">
-                      <img src={item.image} alt={item.name} className="w-full h-full object-cover rounded-lg" />
+                      <img src={item.image || 'https://via.placeholder.com/150'} alt={item.name} className="w-full h-full object-cover rounded-lg" />
                     </div>
                     <div className="flex-grow">
                       <h4 className="text-sm font-bold text-white leading-tight mb-1 line-clamp-1">{item.name}</h4>
@@ -116,7 +138,7 @@ const TrackOrder = () => {
 
               <div className="pt-6 border-t border-white/10 flex justify-between items-end">
                 <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Total Paid</span>
-                <span className="text-3xl font-black text-white tracking-tighter">₹{totalAmount}</span>
+                <span className="text-3xl font-black text-white tracking-tighter">₹{displayTotal}</span>
               </div>
             </div>
 
@@ -127,10 +149,10 @@ const TrackOrder = () => {
                   Shipping Address
                 </h3>
                 <div className="text-sm font-bold text-slate-900 leading-relaxed">
-                  <p>{address.fullName}</p>
-                  <p className="text-slate-500">{address.addressLine}</p>
-                  <p className="text-slate-500">{address.city}, {address.state} - {address.pincode}</p>
-                  <p className="mt-2 text-[#38BDF8]">+91 {address.phone}</p>
+                  <p>{displayAddress.fullName}</p>
+                  <p className="text-slate-500">{displayAddress.addressLine}</p>
+                  <p className="text-slate-500">{displayAddress.city}, {displayAddress.state} - {displayAddress.pincode}</p>
+                  <p className="mt-2 text-[#38BDF8]">+91 {displayAddress.phone}</p>
                 </div>
               </div>
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
@@ -24,6 +24,14 @@ const Payment = () => {
   const [loading, setLoading] = useState(false);
 
   const totalAmount = selectedPlan ? Number(planPrice) : cartTotalAmount;
+
+  useEffect(() => {
+    // If there's no logged in user, kick them to login
+    if (!token) {
+      alert("Please log in or create an account to process this order.");
+      navigate('/login');
+    }
+  }, [token, navigate]);
 
   const handlePayment = async () => {
     setLoading(true);

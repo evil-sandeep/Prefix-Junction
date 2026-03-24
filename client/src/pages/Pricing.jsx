@@ -13,6 +13,7 @@ export const PricingSection = () => {
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
   const { user, token } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,59 +30,19 @@ export const PricingSection = () => {
     fetchPlans();
   }, []);
 
-  const handleSelectPlan = async (planId) => {
+  const handleSelectPlan = async (plan) => {
     if (!user) {
       navigate('/login');
       return;
     }
+    const price = isYearly ? plan.priceYearly : plan.priceMonthly;
+    
+    dispatch({
+      type: 'plan/setSelectedPlan',
+      payload: { planId: plan._id, name: plan.name, price }
+    });
 
-    try {
-      const billingCycle = isYearly ? 'yearly' : 'monthly';
-      
-      // 1. Create order
-      const { data: orderData } = await axios.post(
-        `${API_BASE_URL}/api/subscription/create-order`,
-        { planId, billingCycle },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      const options = {
-        key: 'rzp_test_placeholder', // Should be from env or backend
-        amount: orderData.order.amount,
-        currency: orderData.order.currency,
-        name: 'Petflix Junction',
-        description: 'Premium Subscription',
-        order_id: orderData.order.id,
-        handler: async (response) => {
-          try {
-            const { data } = await axios.post(
-              `${API_BASE_URL}/api/subscription/verify-payment`,
-              { ...response, planId, billingCycle },
-              { headers: { Authorization: `Bearer ${token}` } }
-            );
-            if (data.status === 'success') {
-              alert('Subscription activated! Refreshing your dashboard...');
-              navigate('/dashboard');
-              window.location.reload(); // To update user state from localstorage or refetch
-            }
-          } catch (err) {
-            console.error('Verification failed', err);
-            alert('Payment verification failed');
-          }
-        },
-        prefill: {
-          name: user.fullName,
-          email: user.email,
-        },
-        theme: { color: '#0F172A' },
-      };
-
-      const rzp = new window.Razorpay(options);
-      rzp.open();
-    } catch (err) {
-      console.error('Payment failed', err);
-      alert('Could not initiate payment');
-    }
+    navigate('/checkout');
   };
 
   return (
@@ -159,7 +120,7 @@ export const PricingSection = () => {
               </div>
 
               <button 
-                onClick={() => handleSelectPlan(plan._id)}
+                onClick={() => handleSelectPlan(plan)}
                 className={`w-full py-5 rounded-3xl font-black text-xs uppercase tracking-widest transition-all text-center ${
                   plan.name === 'Premium' ? 'bg-primary text-white hover:bg-primary-hover shadow-xl shadow-primary/20' :
                   plan.name === 'Elite' ? 'bg-slate-900 text-white hover:bg-slate-800' :
