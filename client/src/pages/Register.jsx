@@ -45,6 +45,8 @@ const Register = () => {
     e.preventDefault();
     if (password !== confirmPassword) {
       alert('Passwords do not match');
+    } else if (password.length < 6) {
+      alert('Password must be at least 6 characters');
     } else {
       dispatch(register({ name, email, phone, password }));
     }

@@ -11,6 +11,7 @@ const paymentRoutes = require('./routes/paymentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const planRoutes = require('./routes/planRoutes');
 const subscriptionRoutes = require('./routes/subscriptionRoutes');
+const orderRoutes = require('./routes/orderRoutes');
 
 
 // MongoDB Connection
@@ -29,6 +30,7 @@ app.use('/api/payment', paymentRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/plans', planRoutes);
 app.use('/api/subscription', subscriptionRoutes);
+app.use('/api/orders', orderRoutes);
 
 
 // Basic Route

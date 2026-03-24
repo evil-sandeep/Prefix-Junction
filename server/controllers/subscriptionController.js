@@ -33,6 +33,7 @@ exports.createSubscriptionOrder = async (req, res) => {
       order
     });
   } catch (err) {
+    console.error('Error creating subscription order:', err.message);
     res.status(400).json({
       status: 'fail',
       message: err.message
@@ -100,6 +101,7 @@ exports.verifySubscriptionPayment = async (req, res) => {
       });
     }
   } catch (err) {
+    console.error('Error verifying subscription payment:', err.message);
     res.status(400).json({
       status: 'fail',
       message: err.message

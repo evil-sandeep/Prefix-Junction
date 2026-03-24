@@ -68,6 +68,19 @@ const Payment = () => {
             });
 
             if (data.success || data.status === 'success') {
+              // 4. Save order to DB (only for product orders, not subscriptions)
+              if (!selectedPlan) {
+                await axios.post(`${API_BASE_URL}/api/orders`, {
+                  items: cartItems,
+                  address,
+                  totalAmount,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_payment_id: response.razorpay_payment_id
+                }, {
+                  headers: { Authorization: `Bearer ${token}` }
+                });
+              }
+
               if (selectedPlan) dispatch(clearSelectedPlan());
               navigate('/success', { state: { paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id, amount: totalAmount } });
             }

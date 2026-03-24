@@ -10,11 +10,16 @@ const checkSubscription = async (req, res, next) => {
 
     // Check if subscription has expired
     if (user.plan !== 'Starter' && user.planExpiryDate && new Date() > user.planExpiryDate) {
-      // Downgrade to Starter
-      user.plan = 'Starter';
-      user.subscription.status = 'expired';
-      await user.save();
-      
+      // Use updateOne to bypass pre-save hook (avoids 'next is not a function' error)
+      await User.updateOne(
+        { _id: user._id },
+        {
+          $set: {
+            plan: 'Starter',
+            'subscription.status': 'expired'
+          }
+        }
+      );
       console.log(`User ${user.email} subscription expired. Downgraded to Starter.`);
     }
 

@@ -1,0 +1,16 @@
+{
+  "name": "Petflix Junction",
+  "short_name": "Petflix",
+  "description": "Premium pet care products and grooming services",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0F172A",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
