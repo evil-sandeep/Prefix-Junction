@@ -52,6 +52,16 @@ const AuthRequired = ({ children }) => {
   return user ? children : <Navigate to="/login" state={{ from: location }} replace />;
 };
 
+const AdminRequired = ({ children }) => {
+  const { user } = useSelector((state) => state.auth);
+  const location = useLocation();
+  
+  if (!user) return <Navigate to="/login" state={{ from: location }} replace />;
+  if (user.role !== 'admin') return <Navigate to="/" replace />;
+  
+  return children;
+};
+
 const CheckoutRouter = () => {
   const selectedPlan = useSelector((state) => state.plan.selectedPlan);
   return selectedPlan ? <SubscriptionCheckout /> : <Address />;
@@ -92,7 +102,11 @@ function App() {
         <Route path="/track" element={<TrackOrder />} />
         <Route path="/track-order" element={<Navigate to="/track" replace />} />
         
-        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admindashboard" element={
+          <AdminRequired>
+            <AdminDashboard />
+          </AdminRequired>
+        } />
         <Route path="/pricing" element={<Pricing />} />
         <Route path="/plans" element={<Plans />} />
         <Route path="/login" element={<Login />} />

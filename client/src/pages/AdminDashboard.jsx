@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import Navbar from './Navbar';
-import Footer from './Footer';
-import { LayoutDashboard, Users, Calendar, Clock, ClipboardList, Loader2, AlertCircle, RefreshCw, Plus, Minus, TrendingUp, Award, ShieldCheck, Heart, ShoppingBag, Truck, CheckCircle, XCircle, Package } from 'lucide-react';
+import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { logout, reset } from '../redux/authSlice';
+import { LayoutDashboard, Users, Calendar, Clock, ClipboardList, Loader2, AlertCircle, RefreshCw, Plus, Minus, TrendingUp, Award, ShieldCheck, Heart, ShoppingBag, Truck, CheckCircle, XCircle, Package, LogOut } from 'lucide-react';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
@@ -25,22 +26,17 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [ordersLoading, setOrdersLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [secretKey, setSecretKey] = useState('');
-  const [accessError, setAccessError] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (secretKey === 'Sandeep2274') {
-      setIsAuthenticated(true);
-      setAccessError('');
-    } else {
-      setAccessError('Invalid Access Key');
-    }
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    dispatch(logout());
+    dispatch(reset());
+    navigate('/login');
   };
 
   const fetchBookings = async () => {
-    if (!isAuthenticated) return;
     setLoading(true);
     try {
       const response = await fetch(`${API_BASE_URL}/api/bookings`);
@@ -121,17 +117,15 @@ const AdminDashboard = () => {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
+    fetchBookings();
+    fetchOrders();
+    fetchStats();
+    const pollInterval = setInterval(() => {
       fetchBookings();
       fetchOrders();
-      fetchStats();
-      const pollInterval = setInterval(() => {
-        fetchBookings();
-        fetchOrders();
-      }, 15000);
-      return () => clearInterval(pollInterval);
-    }
-  }, [isAuthenticated]);
+    }, 15000);
+    return () => clearInterval(pollInterval);
+  }, []);
 
   const updateStatus = async (id, newStatus) => {
     try {
@@ -153,55 +147,9 @@ const AdminDashboard = () => {
     }
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[#f8fafc] font-['Outfit'] flex flex-col transition-all duration-700">
-        <Navbar />
-        <div className="flex-1 flex items-center justify-center px-6 py-24">
-          <div className="w-full max-w-[450px] bg-white rounded-[40px] shadow-[0_40px_100px_rgba(0,0,0,0.1)] p-12 border border-white">
-            <div className="w-20 h-20 bg-primary/10 rounded-[24px] flex items-center justify-center text-primary mx-auto mb-8 shadow-inner">
-              <LayoutDashboard size={40} />
-            </div>
-            <h2 className="text-3xl font-black text-gray-900 text-center mb-2 tracking-tight">Admin Access</h2>
-            <p className="text-gray-500 text-center mb-10 font-medium">Please enter your secret key to continue.</p>
-            
-            <form onSubmit={handleLogin} className="space-y-6">
-              {accessError && (
-                <div className="bg-red-50 border border-red-100 text-red-600 p-5 rounded-2xl flex items-center gap-4 text-sm font-bold animate-shake">
-                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
-                    <AlertCircle size={18} />
-                  </div>
-                  {accessError}
-                </div>
-              )}
-              <div className="relative group">
-                <input 
-                  type="password" 
-                  value={secretKey}
-                  onChange={(e) => setSecretKey(e.target.value)}
-                  placeholder="Enter Secret Key" 
-                  className="w-full px-8 py-5 rounded-2xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-900 font-bold text-center tracking-widest"
-                />
-              </div>
-              <button 
-                type="submit" 
-                className="w-full bg-primary hover:bg-[#00b875] text-white font-black py-5 rounded-[20px] transition-all shadow-[0_20px_40px_rgba(0,173,111,0.2)] hover:shadow-[0_25px_50px_rgba(0,173,111,0.3)] hover:-translate-y-1 active:translate-y-0 flex items-center justify-center gap-3 text-lg uppercase tracking-widest"
-              >
-                Access Dashboard
-              </button>
-            </form>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Outfit']">
-      <Navbar />
-
-      <main className="pt-32 pb-24 container mx-auto px-6">
+      <main className="pt-12 pb-24 container mx-auto px-6">
         {/* Header Section */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
           <div>
@@ -219,12 +167,24 @@ const AdminDashboard = () => {
               <div className="text-xs text-gray-400 font-bold uppercase tracking-widest mb-1">Last Updated</div>
               <div className="text-gray-900 font-black">{new Date().toLocaleTimeString()}</div>
             </div>
-            <button 
-              onClick={() => { fetchBookings(); fetchOrders(); fetchStats(); }}
-              className="flex items-center gap-3 bg-white border-2 border-gray-100 p-4 rounded-2xl font-black text-gray-700 hover:border-primary hover:text-primary transition-all shadow-sm group active:scale-95"
-            >
-              <RefreshCw size={20} className={`${loading || ordersLoading ? 'animate-spin text-primary' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
-            </button>
+            <div className="flex items-center gap-3">
+              <button 
+                onClick={() => { fetchBookings(); fetchOrders(); fetchStats(); }}
+                className="flex items-center gap-3 bg-white border-2 border-slate-100 p-4 rounded-2xl font-black text-slate-700 hover:border-primary hover:text-primary transition-all shadow-sm group active:scale-95"
+                title="Refresh Data"
+              >
+                <RefreshCw size={20} className={`${loading || ordersLoading ? 'animate-spin text-primary' : 'group-hover:rotate-180 transition-transform duration-500'}`} />
+              </button>
+
+              <button 
+                onClick={handleLogout}
+                className="flex items-center gap-3 bg-red-50 hover:bg-red-500 border-2 border-red-100 hover:border-red-500 p-4 rounded-2xl font-black text-red-500 hover:text-white transition-all shadow-sm group active:scale-95"
+                title="Logout Admin"
+              >
+                <LogOut size={20} className="group-hover:-translate-x-1 transition-transform" />
+                <span className="hidden md:block">Logout</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -443,14 +403,18 @@ const AdminDashboard = () => {
                           <p className="text-sm text-slate-400 font-medium">{order.userId?.email} · {order.userId?.phone}</p>
                         </div>
                       </div>
-                      <div className="flex items-center gap-4 flex-wrap">
+                      <div className="flex items-center gap-6 flex-wrap">
                         <div className="text-right">
                           <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Order Total</p>
                           <p className="text-2xl font-black text-slate-900">₹{order.totalAmount}</p>
                         </div>
                         <div className="text-right">
+                          <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Transaction ID</p>
+                          <p className="text-sm font-bold text-slate-700 bg-slate-50 px-2 py-0.5 rounded">{order.razorpay_payment_id || 'N/A'}</p>
+                        </div>
+                        <div className="text-right">
                           <p className="text-xs font-black text-slate-400 uppercase tracking-widest">Date</p>
-                          <p className="text-sm font-bold text-slate-700">{new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' })}</p>
+                          <p className="text-sm font-bold text-slate-700">{new Date(order.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' })}</p>
                         </div>
                       </div>
                     </div>
@@ -507,8 +471,6 @@ const AdminDashboard = () => {
           </div>
         )}
       </main>
-
-      <Footer />
     </div>
   );
 };

@@ -30,7 +30,11 @@ const Login = () => {
     }
 
     if (isSuccess || user) {
-      navigate(from, { replace: true });
+      if (user?.role === 'admin') {
+        navigate('/admindashboard', { replace: true });
+      } else {
+        navigate(from, { replace: true });
+      }
     }
 
     dispatch(reset());
