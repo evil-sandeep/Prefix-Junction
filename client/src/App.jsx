@@ -43,9 +43,13 @@ const AddressRequired = ({ children }) => {
   return children;
 };
 
+import { useLocation } from 'react-router-dom';
+
 const AuthRequired = ({ children }) => {
   const { user } = useSelector((state) => state.auth);
-  return user ? children : <Navigate to="/login" />;
+  const location = useLocation();
+  
+  return user ? children : <Navigate to="/login" state={{ from: location }} replace />;
 };
 
 const CheckoutRouter = () => {
@@ -71,9 +75,11 @@ function App() {
         <Route path="/our-product" element={<Navigate to="/products" replace />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={
-          <CartRequired>
-            <CheckoutRouter />
-          </CartRequired>
+          <AuthRequired>
+            <CartRequired>
+              <CheckoutRouter />
+            </CartRequired>
+          </AuthRequired>
         } />
         <Route path="/address" element={<Navigate to="/checkout" replace />} />
         <Route path="/payment" element={

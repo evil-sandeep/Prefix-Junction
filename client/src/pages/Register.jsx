@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { register, reset } from '../redux/authSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -19,6 +19,8 @@ const Register = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || '/dashboard';
 
   const { user, isLoading, isError, isSuccess, message } = useSelector(
     (state) => state.auth
@@ -26,11 +28,11 @@ const Register = () => {
 
   useEffect(() => {
     if (isSuccess || user) {
-      navigate('/dashboard');
+      navigate(from, { replace: true });
     }
 
     dispatch(reset());
-  }, [user, isSuccess, navigate, dispatch]);
+  }, [user, isSuccess, navigate, dispatch, from]);
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -173,7 +175,7 @@ const Register = () => {
             <div className="mt-10 pt-10 border-t border-slate-50 text-center">
               <p className="text-slate-500 font-medium text-sm">
                 Already have an account?{' '}
-                <Link to="/login" className="text-primary font-black hover:underline underline-offset-4">
+                <Link to="/login" state={{ from: location.state?.from }} className="text-primary font-black hover:underline underline-offset-4">
                   Log In
                 </Link>
               </p>
