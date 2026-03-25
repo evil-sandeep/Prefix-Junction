@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { selectCartItems, selectCartTotalAmount } from '../redux/cartSlice';
+import { selectCartItems, selectCartTotalAmount, clearCart } from '../redux/cartSlice';
 import { selectCheckoutAddress } from '../redux/checkoutSlice';
 import { selectSelectedPlan, selectPlanPrice, selectPlanId, clearSelectedPlan } from '../redux/planSlice';
 import Navbar from './Navbar';
@@ -75,23 +75,25 @@ const Payment = () => {
               headers: { Authorization: `Bearer ${token}` }
             });
 
-            if (data.success || data.status === 'success') {
-              // 4. Save order to DB (only for product orders, not subscriptions)
-              if (!selectedPlan) {
-                await axios.post(`${API_BASE_URL}/api/orders`, {
-                  items: cartItems,
-                  address,
-                  totalAmount,
-                  razorpay_order_id: response.razorpay_order_id,
-                  razorpay_payment_id: response.razorpay_payment_id
-                }, {
-                  headers: { Authorization: `Bearer ${token}` }
-                });
-              }
+             if (data.success || data.status === 'success') {
+               // 4. Save order to DB (only for product orders, not subscriptions)
+               if (!selectedPlan) {
+                 await axios.post(`${API_BASE_URL}/api/orders`, {
+                   items: cartItems,
+                   address,
+                   totalAmount,
+                   razorpay_order_id: response.razorpay_order_id,
+                   razorpay_payment_id: response.razorpay_payment_id
+                 }, {
+                   headers: { Authorization: `Bearer ${token}` }
+                 });
+                 // Clear cart after successful product order
+                 dispatch(clearCart());
+               }
 
-              if (selectedPlan) dispatch(clearSelectedPlan());
-              navigate('/success', { state: { paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id, amount: totalAmount } });
-            }
+               if (selectedPlan) dispatch(clearSelectedPlan());
+               navigate('/success', { state: { paymentId: response.razorpay_payment_id, orderId: response.razorpay_order_id, amount: totalAmount } });
+             }
           } catch (err) {
             console.error('Verification failed', err);
             alert('Payment verification failed. Please contact support.');

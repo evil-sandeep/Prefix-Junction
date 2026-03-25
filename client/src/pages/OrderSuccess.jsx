@@ -39,12 +39,12 @@ const OrderSuccess = () => {
 
           <div className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-black text-slate-900 mb-4 tracking-tight leading-tight">
-              {plan ? `${plan} Plan Activated! 🎉` : 'Your Order has been placed successfully 🎉'}
+              {plan ? `Subscription Activated! 🎉` : 'Booking Successful! 🎉'}
             </h1>
             <p className="text-lg text-slate-500 font-medium max-w-md mx-auto">
               {plan 
-                ? "You now have full access to all the premium features in your subscription." 
-                : "We've received your order and we're getting it ready for your furry friend!"}
+                ? `Welcome to the ${plan} tier! Your premium benefits are now active.` 
+                : "Your order has been confirmed. We're getting your pet's favorites ready!"}
             </p>
           </div>
 
@@ -56,8 +56,8 @@ const OrderSuccess = () => {
                   <Package size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{plan ? 'Transaction ID' : 'Order ID'}</p>
-                  <p className="text-sm font-black text-slate-900 font-mono">{orderId}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">{plan ? 'Transaction ID' : 'Booking / Order ID'}</p>
+                  <p className="text-sm font-black text-slate-900 font-mono tracking-wider">{orderId}</p>
                 </div>
               </div>
 
@@ -66,8 +66,8 @@ const OrderSuccess = () => {
                   <CreditCard size={20} />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Payment ID</p>
-                  <p className="text-sm font-black text-slate-900 font-mono">{paymentId}</p>
+                  <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Razorpay Payment ID</p>
+                  <p className="text-sm font-black text-slate-900 font-mono tracking-wider">{paymentId}</p>
                 </div>
               </div>
             </div>
@@ -80,9 +80,9 @@ const OrderSuccess = () => {
                 <div>
                   <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Delivery Address</p>
                   <div className="text-sm font-black text-slate-900 leading-relaxed">
-                    <p className="mb-0.5">{address.fullName}</p>
+                    <p className="mb-0.5">{address?.fullName || 'Customer'}</p>
                     <p className="text-[13px] font-bold text-slate-600 leading-snug">
-                      {address.addressLine}, {address.city}, {address.state} - {address.pincode}
+                      {address?.addressLine}, {address?.city}, {address?.state} - {address?.pincode}
                     </p>
                   </div>
                 </div>
@@ -105,7 +105,11 @@ const OrderSuccess = () => {
 
           {/* Action Buttons */}
           <div className="flex flex-col sm:flex-row gap-5">
-            <Link to={plan ? "/dashboard" : "/track"} className="flex-1 bg-[#0F172A] hover:bg-slate-800 text-white py-5 rounded-3xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl flex items-center justify-center gap-3 group text-center">
+            <Link 
+              to={plan ? "/dashboard" : "/track"} 
+              state={!plan ? { order: { _id: orderId, address, totalAmount: amount, deliveryStatus: 'processing', createdAt: new Date() } } : {}}
+              className="flex-1 bg-[#0F172A] hover:bg-slate-800 text-white py-5 rounded-3xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 shadow-xl flex items-center justify-center gap-3 group text-center"
+            >
               {plan ? "Go to Dashboard" : "Track Order"}
               <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
             </Link>

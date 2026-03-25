@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { clearCart } from '../redux/cartSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
@@ -7,6 +9,8 @@ import { jsPDF } from 'jspdf';
 import emailjs from '@emailjs/browser';
 
 function BookYourSlot() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.auth || {});
 
   const [formData, setFormData] = useState({
@@ -166,10 +170,20 @@ function BookYourSlot() {
           bookingData: newBookingData
         });
 
-        // Send Email Confirmation
-        sendEmailConfirmation(newBookingId, newBookingData);
+        // Clear cart after booking
+        dispatch(clearCart());
 
-        // Reset form
+        // Redirect to Success Page
+        navigate('/success', { 
+          state: { 
+            orderId: newBookingId, 
+            paymentId: 'PAY-SALON-VISIT', // Placeholder for non-online payments
+            amount: 0, 
+            bookingData: newBookingData 
+          } 
+        });
+
+        // Reset form (though navigate happens, this cleans state)
         setFormData({
           name: '',
           email: '',

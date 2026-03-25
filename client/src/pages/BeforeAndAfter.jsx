@@ -1,4 +1,10 @@
 import React from 'react';
+import beforeGrooming from '../assets/beforecat.png';
+import afterGrooming from '../assets/aftercat.png';
+import afterspa from '../assets/afterspa.png';
+import beforeSpa from '../assets/beforespa.png';
+import beforeHaircut from '../assets/beforehaircut.png';
+import afterHaircut from '../assets/afterhaircut.png';
 
 const BeforeAndAfter = () => {
   return (
@@ -7,23 +13,23 @@ const BeforeAndAfter = () => {
         <div className="text-center mb-16">
           <h2 className="text-[42px] font-bold text-primary italic">Before & After</h2>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {[
-            { 
-              title: "Full Grooming Package", 
-              before: "https://images.unsplash.com/photo-1541364983171-a8ba01e95cfc?q=80&w=1887&auto=format&fit=crop", 
-              after: "https://images.unsplash.com/photo-1516734212186-a967f81ad0d7?q=80&w=2071&auto=format&fit=crop" 
+            {
+              title: "Full Grooming Package",
+              before: beforeGrooming,
+              after: afterGrooming
             },
-            { 
-              title: "Spa Treatment", 
-              before: "https://images.unsplash.com/photo-1534361960057-19889db9621e?q=80&w=2070&auto=format&fit=crop", 
-              after: "https://images.unsplash.com/photo-1537151608828-ea2b11777ee8?q=80&w=2068&auto=format&fit=crop" 
+            {
+              title: "Spa Treatment",
+              before: beforeSpa,
+              after: afterspa
             },
-            { 
-              title: "Haircut & Style", 
-              before: "https://images.unsplash.com/photo-1591768793355-74d7cab35171?q=80&w=2070&auto=format&fit=crop", 
-              after: "https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?q=80&w=2043&auto=format&fit=crop" 
+            {
+              title: "Haircut & Style",
+              before: beforeHaircut,
+              after: afterHaircut
             }
           ].map((item, idx) => (
             <div key={idx} className="bg-white rounded-[24px] overflow-hidden shadow-lg border border-white hover:shadow-2xl transition-all duration-300">

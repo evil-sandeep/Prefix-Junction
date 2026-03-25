@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import vet from '../assets/aaa.jpg';
+
 
 // The reusable section component
 export const HolisticCareSection = () => {
@@ -14,14 +16,14 @@ export const HolisticCareSection = () => {
             <h2 className="text-[46px] font-bold text-primary hover:text-[#00b875] transition-colors uppercase tracking-tight">Simply the best for your pet</h2>
           </Link>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 lg:gap-16">
           {/* Curated by Vets Card */}
           <div className="bg-white rounded-[40px] p-12 transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)] flex flex-col items-center text-center shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-white">
             <div className="w-[200px] h-[200px] rounded-full overflow-hidden mb-10 border-8 border-[#fef7f0] shadow-inner">
-              <img 
-                src="https://images.unsplash.com/photo-1581578731548-c64695cc6958?q=80&w=2070&auto=format&fit=crop" 
-                alt="Curated by Vets" 
+              <img
+                src={vet}
+                alt="Curated by Vets"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -34,9 +36,9 @@ export const HolisticCareSection = () => {
           {/* Clean & Transparent Card */}
           <div className="bg-white rounded-[40px] p-12 transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)] flex flex-col items-center text-center shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-white">
             <div className="w-[200px] h-[200px] rounded-full overflow-hidden mb-10 border-8 border-[#fef7f0] shadow-inner">
-              <img 
-                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop" 
-                alt="Clean & Transparent" 
+              <img
+                src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop"
+                alt="Clean & Transparent"
                 className="w-full h-full object-cover"
               />
             </div>
@@ -49,9 +51,9 @@ export const HolisticCareSection = () => {
           {/* Holistic Care Card */}
           <div className="bg-white rounded-[40px] p-12 transition-all duration-500 hover:shadow-[0_30px_70px_rgba(0,0,0,0.06)] flex flex-col items-center text-center shadow-[0_15px_50px_rgba(0,0,0,0.03)] border border-white">
             <div className="w-[200px] h-[200px] rounded-full overflow-hidden mb-10 border-8 border-[#fef7f0] shadow-inner">
-              <img 
-                src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop" 
-                alt="Holistic Care" 
+              <img
+                src="https://images.unsplash.com/photo-1441974231531-c6227db76b6e?q=80&w=2071&auto=format&fit=crop"
+                alt="Holistic Care"
                 className="w-full h-full object-cover"
               />
             </div>

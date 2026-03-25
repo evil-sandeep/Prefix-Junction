@@ -24,6 +24,9 @@ import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import Plans from './pages/Plans';
 import SubscriptionCheckout from './pages/SubscriptionCheckout';
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsAndConditions from './pages/TermsAndConditions';
+
 
 // Route Protectors
 const CartRequired = ({ children }) => {
@@ -118,7 +121,10 @@ function App() {
             <Dashboard />
           </AuthRequired>
         } />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
       </Routes>
+
     </Router>
   );
 }
