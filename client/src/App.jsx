@@ -129,7 +129,6 @@ function App() {
 
       <Analytics />
     </Router>
-
   );
 }
 

@@ -14,6 +14,7 @@ import OurWork from './OurWork';
 import ClientsReview from './ClientsReview';
 import ContactUs from './ContactUs';
 import { PricingSection } from './Pricing';
+import Map from './Map';
 import SEO from '../components/SEO';
 
 function Home() {
