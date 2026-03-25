@@ -185,7 +185,7 @@ const OurProduct = () => {
                 </button>
 
                 {/* Add to Cart Quick View */}
-                <div className={`absolute inset-x-0 bottom-0 p-4 transition-all duration-500 transform translate-y-full group-hover:translate-y-0`}>
+                <div className={`absolute inset-x-0 bottom-0 p-4 transition-all duration-500 transform translate-y-0 md:translate-y-full md:group-hover:translate-y-0`}>
                   <button 
                     onClick={() => handleAddToCart(product)}
                     className="w-full bg-[#0F172A] hover:bg-slate-800 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-2xl flex items-center justify-center gap-2 group/btn"
