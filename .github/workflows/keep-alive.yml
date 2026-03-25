@@ -1,0 +1,26 @@
+# This workflow pings the Render backend every 5 minutes to prevent it from going to sleep.
+# Render's free tier spins down the server after some period of inactivity.
+# This keeps the server "warm" so users don't experience initial slow request times.
+
+name: Keep Backend Alive
+
+on:
+  schedule:
+    # Runs every 5 minutes ("*/5 * * * *")
+    # GitHub Actions may delay cron jobs, but this is sufficient for keeping Render awake.
+    - cron: '*/5 * * * *'
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+
+jobs:
+  ping-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Ping Render Backend
+        # We use curl with -I (head request) or just a simple GET. 
+        # --fail ensures that the action shows as failed if the server is down.
+        run: |
+          curl --fail https://prefix-junction-backend.onrender.com/health
+        
+      - name: Log Success
+        run: echo "Successfully pinged the backend at $(date)"

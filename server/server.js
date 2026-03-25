@@ -38,6 +38,11 @@ app.get('/', (req, res) => {
   res.json({ message: "Welcome to Petflix Junction API", status: "Running" });
 });
 
+// Health Check Endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'UP', message: 'Server is healthy' });
+});
+
 // Start Server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
