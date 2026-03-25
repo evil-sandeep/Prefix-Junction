@@ -5,6 +5,7 @@ import axios from 'axios';
 import { Check, Shield, Star, Zap, Crown, Loader2 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import { setSelectedPlan } from '../redux/planSlice';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
@@ -37,10 +38,7 @@ export const PricingSection = () => {
     }
     const price = isYearly ? plan.priceYearly : plan.priceMonthly;
     
-    dispatch({
-      type: 'plan/setSelectedPlan',
-      payload: { planId: plan._id, name: plan.name, price }
-    });
+    dispatch(setSelectedPlan({ planId: plan._id, name: plan.name, price }));
 
     navigate('/checkout');
   };

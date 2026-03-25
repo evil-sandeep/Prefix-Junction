@@ -57,6 +57,10 @@ export const authSlice = createSlice({
       state.isError = false;
       state.message = '';
     },
+    setUser: (state, action) => {
+      state.user = action.payload;
+      localStorage.setItem('user', JSON.stringify(action.payload));
+    },
     logout: (state) => {
       localStorage.removeItem('token');
       localStorage.removeItem('user');
@@ -103,7 +107,7 @@ export const authSlice = createSlice({
   },
 });
 
-export const { reset, logout } = authSlice.actions;
+export const { reset, logout, setUser } = authSlice.actions;
 export const selectUser = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => !!state.auth.user;
 

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { selectCheckoutAddress } from '../redux/checkoutSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
-import { CheckCircle, ShoppingBag, ArrowRight, Download, MapPin, Package, CreditCard } from 'lucide-react';
+import { CheckCircle, ShoppingBag, ArrowRight, Download, MapPin, Package, CreditCard, ShieldCheck } from 'lucide-react';
 
 const OrderSuccess = () => {
   const location = useLocation();

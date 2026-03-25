@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
-import { logout } from '../redux/authSlice';
+import { logout, setUser } from '../redux/authSlice';
+
 import axios from 'axios';
 import Navbar from './Navbar';
 import Footer from './Footer';
@@ -46,10 +47,8 @@ const Dashboard = () => {
         // and rely on the fact that if it changed, it's saved in DB.
         // Pass the existing token back in the payload, otherwise authSlice WILL wipe it out
         // because the getMe API route only returns user data, not the JWT token.
-        dispatch({ 
-          type: 'auth/login/fulfilled', 
-          payload: { data: data.data, token: token } 
-        });
+        dispatch(setUser(data.data.user));
+
       } catch (err) {
         console.error('Failed to fetch user', err);
       } finally {
