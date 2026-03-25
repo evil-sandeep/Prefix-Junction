@@ -2,10 +2,16 @@ import React from 'react';
 import { CheckCircle2 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SEO from '../components/SEO';
 
 function AboutUs() {
   return (
     <div className="min-h-screen bg-white font-['Outfit']">
+      <SEO 
+        title="About Us" 
+        description="Learn about Petflix Junction's journey, our mission to provide elite pet care in Kendujhar, and meet our team of expert groomers and pet stylists."
+        path="/about"
+      />
       <Navbar />
 
       {/* About Us Hero */}

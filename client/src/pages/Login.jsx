@@ -4,6 +4,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { login, reset } from '../redux/authSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SEO from '../components/SEO';
 import { Mail, Lock, Loader2, LogIn, ChevronRight, AlertCircle } from 'lucide-react';
 
 const Login = () => {
@@ -54,6 +55,11 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Outfit'] flex flex-col">
+      <SEO 
+        title="Login" 
+        description="Login to your Petflix Junction account to manage your bookings, track your orders, and access exclusive pet care benefits."
+        path="/login"
+      />
       <Navbar />
       
       <main className="flex-grow flex items-center justify-center py-20 px-6">

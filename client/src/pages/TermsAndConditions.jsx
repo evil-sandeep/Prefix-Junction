@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SEO from '../components/SEO';
 
 const TermsAndConditions = () => {
   useEffect(() => {
@@ -9,6 +10,11 @@ const TermsAndConditions = () => {
 
   return (
     <div className="min-h-screen bg-white font-['Outfit']">
+      <SEO 
+        title="Terms & Conditions" 
+        description="Review the terms and conditions for using Petflix Junction's website and grooming services. Information on bookings, cancellations, and pet health policies."
+        path="/terms-and-conditions"
+      />
       <Navbar />
       
       <main className="py-24">

@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { ShieldCheck, Activity, Heart, Stethoscope, Scissors, Star, ArrowRight } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SEO from '../components/SEO';
 
 function Services() {
   const { user } = useSelector((state) => state.auth);
@@ -14,6 +15,7 @@ function Services() {
     if (servicePlan === 'Elite') return user?.plan === 'Elite';
     return false;
   };
+
   const allServices = [
     { name: "Teeth Brushing", price: "Free", icon: <Activity size={24} />, description: "Professional dental cleaning for your pets.", plan: 'Starter' },
     { name: "Ear Cleaning", price: "₹199", icon: <Heart size={24} />, description: "Gentle and thorough ear hygiene.", plan: 'Starter' },
@@ -36,6 +38,11 @@ function Services() {
 
   return (
     <div className="min-h-screen bg-white font-['Outfit']">
+      <SEO 
+        title="Our Services" 
+        description="Explore our wide range of professional pet care services including grooming, taxi, training, walking, and boarding. Professional care for your furry friends."
+        path="/services"
+      />
       <Navbar />
 
       <section className="py-24 bg-[#fffaf5]">

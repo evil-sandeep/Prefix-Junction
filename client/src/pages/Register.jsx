@@ -4,6 +4,7 @@ import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { register, reset } from '../redux/authSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SEO from '../components/SEO';
 import { User, Mail, Lock, Loader2, UserPlus, ChevronRight, AlertCircle } from 'lucide-react';
 
 const Register = () => {
@@ -54,6 +55,11 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Outfit'] flex flex-col">
+      <SEO 
+        title="Register" 
+        description="Create your Petflix Junction account today and start your journey to premium pet care. Register now for easy bookings and personalized pet services."
+        path="/register"
+      />
       <Navbar />
       
       <main className="flex-grow flex items-center justify-center py-20 px-6">

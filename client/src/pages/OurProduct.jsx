@@ -4,6 +4,7 @@ import { addItem } from '../redux/cartSlice';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { ShoppingBag, Star, Filter, ArrowRight, Heart } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const products = [
   {
@@ -96,6 +97,11 @@ const OurProduct = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] font-['Outfit']">
+      <SEO 
+        title="Our Products" 
+        description="Shop for premium pet food, grooming kits, toys, and luxury accessories. Curated collection of high-quality products from trusted brands for your pets."
+        path="/products"
+      />
       <Navbar />
 
       {/* Hero Section */}

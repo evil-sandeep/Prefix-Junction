@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /admindashboard/
+Disallow: /dashboard/
+Disallow: /checkout/
+Disallow: /payment/
+Disallow: /success/
+
+Sitemap: https://www.petflixjunction.com/sitemap.xml

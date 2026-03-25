@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Navbar from './Navbar';
 import Footer from './Footer';
+import SEO from '../components/SEO';
 
 const PrivacyPolicy = () => {
   useEffect(() => {
@@ -9,6 +10,11 @@ const PrivacyPolicy = () => {
 
   return (
     <div className="min-h-screen bg-white font-['Outfit']">
+      <SEO 
+        title="Privacy Policy" 
+        description="Our commitment to your privacy. Read Petflix Junction's privacy policy to understand how we collect, use, and protect your personal and pet information."
+        path="/privacy-policy"
+      />
       <Navbar />
       
       <main className="py-24">

@@ -6,6 +6,7 @@ import { Check, Shield, Star, Zap, Crown, Loader2 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { setSelectedPlan } from '../redux/planSlice';
+import SEO from '../components/SEO';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
 
@@ -142,6 +143,11 @@ export const PricingSection = () => {
 const Pricing = () => {
     return (
         <div className="min-h-screen bg-white">
+            <SEO 
+              title="Pricing & Membership" 
+              description="Choose the perfect pet care plan for your needs. We offer Starter, Premium, and Elite memberships with exclusive grooming benefits and discounts."
+              path="/pricing"
+            />
             <Navbar />
             <PricingSection />
             <Footer />

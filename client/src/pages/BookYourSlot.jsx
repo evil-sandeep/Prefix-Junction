@@ -7,6 +7,7 @@ import Footer from './Footer';
 import { CheckCircle2, Loader2, AlertCircle } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 import emailjs from '@emailjs/browser';
+import SEO from '../components/SEO';
 
 function BookYourSlot() {
   const dispatch = useDispatch();
@@ -209,6 +210,11 @@ function BookYourSlot() {
 
   return (
     <div className="min-h-screen bg-white font-['Outfit']">
+      <SEO 
+        title="Book Your Slot" 
+        description="Schedule a professional grooming session for your pet. Choose your preferred service, date, and time slot for a personalized care experience."
+        path="/booking"
+      />
       <Navbar />
 
       {/* Booking Page Hero/Form Section */}
