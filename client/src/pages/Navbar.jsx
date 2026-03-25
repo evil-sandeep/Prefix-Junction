@@ -65,7 +65,7 @@ function Navbar() {
               to="/pricing" 
               className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide"
               onClick={(e) => {
-                if (window.location.hash === '#/') {
+                if (window.location.pathname === '/') {
                   e.preventDefault();
                   document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
                 }

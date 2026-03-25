@@ -1,7 +1,7 @@
 import React from 'react';
 import { Analytics } from '@vercel/analytics/react';
 
-import { HashRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectCartItems } from './redux/cartSlice';
 import { selectCheckoutAddress } from './redux/checkoutSlice';
