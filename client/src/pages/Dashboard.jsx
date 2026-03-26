@@ -4,6 +4,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { logout, setUser } from '../redux/authSlice';
 
 import axios from 'axios';
+import { jsPDF } from 'jspdf';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import { 
@@ -103,66 +104,93 @@ const Dashboard = () => {
   }, [token, hasFetchedBookings, hasFetchedOrders]);
 
   const handleDownloadReceipt = (booking) => {
-    const receiptHTML = `
-      <html>
-        <head>
-          <title>Booking Receipt - ${booking.bookingId}</title>
-          <style>
-            body { font-family: 'Arial', sans-serif; padding: 40px; color: #333; }
-            .receipt-container { max-width: 600px; margin: 0 auto; border: 2px dashed #ccc; padding: 30px; border-radius: 12px; }
-            .header { text-align: center; border-bottom: 2px solid #38BDF8; padding-bottom: 20px; margin-bottom: 20px; }
-            .logo { font-size: 28px; font-weight: 900; color: #38BDF8; margin: 0; }
-            .title { font-size: 14px; color: #666; letter-spacing: 2px; text-transform: uppercase; }
-            .details { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px; }
-            .detail-item p { margin: 5px 0; }
-            .label { font-size: 11px; text-transform: uppercase; color: #999; font-weight: bold; }
-            .value { font-size: 16px; font-weight: bold; }
-            .service { background: #f8fafc; padding: 20px; border-radius: 8px; text-align: center; font-size: 20px; font-weight: bold; border: 1px solid #e2e8f0; }
-            .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #999; }
-          </style>
-        </head>
-        <body>
-          <div class="receipt-container">
-            <div class="header">
-              <h1 class="logo">Petflix Junction</h1>
-              <p class="title">Official Appointment Receipt</p>
-            </div>
-            <div class="details">
-              <div class="detail-item">
-                <p class="label">Booking ID</p>
-                <p class="value">${booking.bookingId}</p>
-              </div>
-              <div class="detail-item">
-                <p class="label">Date & Time</p>
-                <p class="value">${booking.date} | ${booking.slot}</p>
-              </div>
-              <div class="detail-item">
-                <p class="label">Customer Name</p>
-                <p class="value">${booking.name}</p>
-              </div>
-              <div class="detail-item">
-                <p class="label">Status</p>
-                <p class="value" style="color: #38BDF8; text-transform: uppercase;">${booking.status}</p>
-              </div>
-            </div>
-            <div class="service">
-              <p class="label" style="text-align: left; margin-bottom: 10px;">Service Booked</p>
-              ${booking.service}
-            </div>
-            <div class="footer">
-              <p>Thank you for choosing Petflix Junction! Please show this receipt at the front desk.</p>
-              <p>Printed on: ${new Date().toLocaleString()}</p>
-            </div>
-          </div>
-          <script>
-            window.onload = () => { window.print(); };
-          </script>
-        </body>
-      </html>
-    `;
-    const printWindow = window.open('', '_blank');
-    printWindow.document.write(receiptHTML);
-    printWindow.document.close();
+    if (!booking || !booking.bookingId) return;
+    
+    const doc = new jsPDF();
+    const primaryColor = [0, 173, 111]; // #00AD6F
+
+    // Brand Header
+    doc.setFontSize(24);
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setFont(undefined, 'bold');
+    doc.text('PETFLIX JUNCTION', 105, 25, { align: 'center' });
+    
+    doc.setFontSize(10);
+    doc.setTextColor(150);
+    doc.setFont(undefined, 'normal');
+    doc.text('PREMIUM PET GROOMING & CARE', 105, 32, { align: 'center' });
+
+    // Decorative Line
+    doc.setDrawColor(240);
+    doc.setLineWidth(0.5);
+    doc.line(20, 40, 190, 40);
+
+    // Document Title
+    doc.setFontSize(16);
+    doc.setTextColor(30);
+    doc.setFont(undefined, 'bold');
+    doc.text('BOOKING RECEIPT', 20, 55);
+
+    // Order/Booking Info
+    doc.setFontSize(10);
+    doc.setTextColor(100);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Booking Number:`, 20, 65);
+    doc.setTextColor(0);
+    doc.setFont(undefined, 'bold');
+    doc.text(booking.bookingId.toUpperCase(), 60, 65);
+
+    doc.setTextColor(100);
+    doc.setFont(undefined, 'normal');
+    doc.text(`Date:`, 20, 72);
+    doc.setTextColor(0);
+    doc.text(new Date(booking.createdAt || Date.now()).toLocaleDateString(), 60, 72);
+
+    doc.setTextColor(100);
+    doc.text(`Status:`, 20, 79);
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.text(booking.status.toUpperCase(), 60, 79);
+
+    // Content Section
+    doc.setFillColor(250, 250, 250);
+    doc.roundedRect(20, 90, 170, 60, 5, 5, 'F');
+
+    doc.setFontSize(12);
+    doc.setTextColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.text('Service Details', 30, 105);
+    
+    doc.setFontSize(10);
+    doc.setTextColor(0);
+    doc.text(`Service:`, 30, 115);
+    doc.setFont(undefined, 'bold');
+    doc.text(booking.service || 'N/A', 70, 115);
+    
+    doc.setFont(undefined, 'normal');
+    doc.text(`Appointment Date:`, 30, 122);
+    doc.text(booking.date || 'N/A', 70, 122);
+    
+    doc.text(`Time Slot:`, 30, 129);
+    doc.text(booking.slot || 'N/A', 70, 129);
+    
+    doc.text(`Customer Name:`, 30, 136);
+    doc.text(booking.name || 'N/A', 70, 136);
+
+    // Footer
+    doc.setFontSize(9);
+    doc.setTextColor(150);
+    doc.setFont(undefined, 'italic');
+    doc.text('Thank you for choosing Petflix Junction!', 105, 170, { align: 'center' });
+    
+    doc.setDrawColor(primaryColor[0], primaryColor[1], primaryColor[2]);
+    doc.setLineWidth(1);
+    doc.line(85, 175, 125, 175);
+
+    doc.setFontSize(8);
+    doc.setTextColor(180);
+    doc.setFont(undefined, 'normal');
+    doc.text('This receipt was downloaded from your profile dashboard.', 105, 185, { align: 'center' });
+
+    doc.save(`Petflix-Receipt-${booking.bookingId}.pdf`);
   };
 
   const onLogout = () => {
