@@ -12,10 +12,18 @@ const ContactUs = () => {
     setLoading(true);
     setStatus({ type: null, message: '' });
 
-    emailjs.sendForm(
+    const templateParams = {
+      name: form.current.name.value,
+      email: form.current.email.value,
+      phone: form.current.phone.value,
+      message: form.current.message.value,
+      time: new Date().toLocaleString(),
+    };
+
+    emailjs.send(
       import.meta.env.VITE_EMAILJS_SERVICE_ID,
       import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-      form.current,
+      templateParams,
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     )
     .then((result) => {
@@ -76,9 +84,9 @@ const ContactUs = () => {
           <div className="md:w-1/2 p-12">
             <form ref={form} className="space-y-6" onSubmit={sendEmail}>
               <div className="grid grid-cols-1 gap-6">
-                <input required name="from_name" type="text" placeholder="Your Name" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
-                <input required name="reply_to" type="email" placeholder="Your Email" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
-                <input name="subject" type="text" placeholder="Subject" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                <input required name="name" type="text" placeholder="Your Name" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                <input required name="email" type="email" placeholder="Your Email" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
+                <input required name="phone" type="tel" placeholder="Your Phone" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none" />
                 <textarea required name="message" placeholder="Message" rows="4" className="w-full bg-gray-50 border-none rounded-2xl p-5 text-gray-800 focus:ring-2 focus:ring-primary/20 transition-all outline-none resize-none"></textarea>
               </div>
 
