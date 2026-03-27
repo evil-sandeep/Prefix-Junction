@@ -123,24 +123,24 @@ function BookYourSlot() {
   const sendEmailConfirmation = async (bookingId, bookingData) => {
     const templateParams = {
       booking_id: bookingId,
-      user_name: bookingData.name,
-      user_email: bookingData.email,
-      user_phone: bookingData.phone,
-      service_name: bookingData.service,
-      booking_date: bookingData.date,
-      booking_slot: bookingData.slot,
+      name: bookingData.name,
+      email: bookingData.email,
+      phone: bookingData.phone,
+      service: bookingData.service,
+      date: bookingData.date,
+      slot: bookingData.slot,
     };
 
     try {
       await emailjs.send(
-        import.meta.env.VITE_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        import.meta.env.VITE_BOOKING_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_BOOKING_EMAILJS_TEMPLATE_ID,
         templateParams,
-        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+        import.meta.env.VITE_BOOKING_EMAILJS_PUBLIC_KEY
       );
-      console.log('Email sent successfully');
+      console.log('Booking confirmation email sent successfully');
     } catch (error) {
-      console.error('Failed to send email:', error);
+      console.error('Failed to send booking confirmation email:', error);
     }
   };
 
@@ -170,6 +170,9 @@ function BookYourSlot() {
           bookingId: newBookingId,
           bookingData: newBookingData
         });
+
+        // Send Email Confirmation
+        sendEmailConfirmation(newBookingId, newBookingData);
 
         // Clear cart after booking
         dispatch(clearCart());
