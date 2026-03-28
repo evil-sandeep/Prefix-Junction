@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Instagram, Facebook } from 'lucide-react';
 import logo from '../assets/logo.jpg';
 
 function Footer() {
@@ -66,8 +67,25 @@ function Footer() {
                   </Link>
                 </li>
               ))}
-
             </ul>
+            <div className="mt-8 flex items-center gap-4">
+              <a 
+                href="https://www.facebook.com/share/1C8yWhc6zv/" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-[#1877F2] hover:text-white transition-all duration-300 border border-white/10"
+              >
+                <Facebook size={18} />
+              </a>
+              <a 
+                href="https://www.instagram.com/petflixjunction28?igsh=MWFpc2VkNnBtc3d6Zg==" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center hover:bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] hover:text-white transition-all duration-300 border border-white/10"
+              >
+                <Instagram size={18} />
+              </a>
+            </div>
           </div>
 
           {/* Newsletter Column */}
@@ -94,7 +112,6 @@ function Footer() {
             <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
             <Link to="/terms-and-conditions" className="hover:text-primary transition-colors">Terms of Service</Link>
           </div>
-
         </div>
       </div>
     </footer>
