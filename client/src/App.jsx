@@ -73,12 +73,14 @@ const CheckoutRouter = () => {
 };
 
 import ScrollToTop from './components/ScrollToTop';
+import WhatsappMsg from './components/WhatsappMsg';
 
 function App() {
   console.log('App is rendering');
   return (
     <Router>
       <ScrollToTop />
+      <WhatsappMsg />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
