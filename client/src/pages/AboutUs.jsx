@@ -3,6 +3,7 @@ import { CheckCircle2 } from 'lucide-react';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import SEO from '../components/SEO';
+import FounderImg from '../assets/abhinas.jpg';
 
 function AboutUs() {
   return (
@@ -108,22 +109,58 @@ function AboutUs() {
         </div>
       </section>
 
+      {/* About Founder Section */}
+      <section className="py-24 bg-[#0c0d10] text-white">
+        <div className="container mx-auto px-6">
+          <div className="flex flex-col lg:flex-row-reverse gap-20 items-center">
+            <div className="flex-1">
+              <h2 className="text-[38px] font-bold text-primary mb-2 leading-none uppercase tracking-tight">About Founder</h2>
+              <h3 className="text-[30px] font-bold text-white mb-10 leading-tight">Abinash Rout</h3>
+
+              <div className="space-y-6 text-[18px] text-gray-400 leading-relaxed font-light">
+                <p>
+                  <span className="text-primary font-bold">Petflix Junction</span> was founded by <span className="text-white font-medium">Abinash Rout</span>, a successful, young, and dynamic entrepreneur who has established his presence across multiple business sectors. With a passion for innovation and community impact, he has expanded his entrepreneurial journey into the pet care industry by launching Petflix Junction—an initiative dedicated to enhancing the lives of pets and their families.
+                </p>
+                <p>
+                  Petflix Junction is a comprehensive pet care destination designed to provide professional grooming and wellness services. From bathing and styling to complete parlour care, every pet receives expert attention in a safe and friendly environment. In addition, the brand offers its own line of high-quality pet food, treats, and accessories under the Petflix Junction label, ensuring both quality and trust. The organization is also <span className="text-primary">ISO 9001:2015 certified</span>, reflecting its commitment to maintaining high standards of service and customer satisfaction.
+                </p>
+                <p className="italic border-l-4 border-primary pl-6 py-2">
+                  "Beyond business, Abinash Rout envisions Petflix Junction as a platform for compassion and social responsibility. For the first time in Keonjhar, he has introduced a facility where pets are cared for with love and understanding."
+                </p>
+                <p>
+                  Moreover, he has pledged to provide <span className="text-white font-medium">free medical treatment and care for stray dogs</span> in the region, reinforcing his dedication to animal welfare and community service.
+                </p>
+              </div>
+            </div>
+
+            <div className="w-full lg:w-5/12">
+              <div className="relative group">
+                <div className="absolute -inset-4 border border-primary/20 rounded-[40px] z-0 group-hover:inset-0 transition-all duration-500"></div>
+                <img
+                  src={FounderImg}
+                  alt="Abinash Rout - Founder"
+                  className="rounded-[40px] shadow-2xl relative z-10 w-full object-cover aspect-[4/5] filter grayscale hover:grayscale-0 transition-all duration-700"
+                />
+                <div className="absolute -top-10 -left-10 w-64 h-64 bg-primary/20 rounded-full blur-3xl -z-0 opacity-50"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Meet Our Team Section */}
-      <section className="py-24 bg-[#f8f9fa]" id="team">
+      {/* <section className="py-24 bg-[#f8f9fa]" id="team">
         <div className="container mx-auto px-6">
           <div className="text-center mb-16">
-            <h4 className="text-gray-400 font-medium text-lg mb-2 italic">Team Members</h4>
-            <h2 className="text-[46px] font-bold text-primary">Meet Our Expert Team</h2>
+            <h4 className="text-gray-400 font-medium text-lg mb-2 italic">Company Leadership</h4>
+            <h2 className="text-[46px] font-bold text-primary">Meet Our Founder</h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="flex justify-center mt-10">
             {[
-              { name: "Sandeep Sahu", role: "CEO & Founder", img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1974&auto=format&fit=crop" },
-              { name: "Priya Sharma", role: "Expert Groomer", img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1974&auto=format&fit=crop" },
-              { name: "Rahul Das", role: "Pet Stylist", img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=1974&auto=format&fit=crop" },
-              { name: "Ananya Ray", role: "Customer Care", img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=2070&auto=format&fit=crop" }
+              { name: "Abinash Rout", role: "CEO & Founder", img: FounderImg }
             ].map((member, idx) => (
-              <div key={idx} className="group">
+              <div key={idx} className="group max-w-sm w-full">
                 <div className="relative overflow-hidden rounded-[40px] mb-6 shadow-lg aspect-[4/5] bg-white">
                   <img
                     src={member.img}
@@ -143,7 +180,7 @@ function AboutUs() {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       <Footer />
     </div>
