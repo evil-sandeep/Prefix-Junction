@@ -4,9 +4,13 @@ exports.getStats = async (req, res) => {
   try {
     let stats = await Stat.findOne({ isSingleton: true });
     
-    // Auto-initialize if not exists
+    // Auto-initialize if not exists with correct defaults
     if (!stats) {
-      stats = new Stat({ isSingleton: true });
+      stats = new Stat({ 
+        isSingleton: true,
+        happyPets: 100,
+        expertGroomers: 3
+      });
       await stats.save();
     }
 

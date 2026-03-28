@@ -7,7 +7,7 @@ const StatSchema = new mongoose.Schema({
   },
   expertGroomers: {
     type: Number,
-    default: 10
+    default: 3
   },
   premiumCare: {
     type: String,
