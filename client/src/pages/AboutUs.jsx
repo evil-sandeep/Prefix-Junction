@@ -32,12 +32,12 @@ function AboutUs() {
           </p>
           <div className="flex justify-center gap-8">
             <div className="flex flex-col items-center">
-              <span className="text-primary text-4xl font-bold mb-1">2025</span>
+              <span className="text-primary text-4xl font-bold mb-1">2026</span>
               <span className="text-white/60 text-xs uppercase tracking-widest">Established</span>
             </div>
             <div className="h-12 w-px bg-white/10"></div>
             <div className="flex flex-col items-center">
-              <span className="text-primary text-4xl font-bold mb-1">500+</span>
+              <span className="text-primary text-4xl font-bold mb-1">100+</span>
               <span className="text-white/60 text-xs uppercase tracking-widest">Happy Pets</span>
             </div>
             <div className="h-12 w-px bg-white/10"></div>
