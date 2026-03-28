@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 const OurWork = () => {
   const [stats, setStats] = useState({
-    happyPets: 500,
-    expertGroomers: 10,
+    happyPets: 100,
+    expertGroomers: 3,
     premiumCare: "24/7",
     safetyRate: 100
   });
@@ -20,9 +20,9 @@ const OurWork = () => {
         console.error('Error fetching stats:', error);
       }
     };
-    
+
     fetchStats();
-    
+
     // Poll for latest stats every 30 seconds
     const interval = setInterval(fetchStats, 30000);
     return () => clearInterval(interval);

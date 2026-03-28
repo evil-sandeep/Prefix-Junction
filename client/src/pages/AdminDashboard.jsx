@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { logout, reset } from '../redux/authSlice';
 import { LayoutDashboard, Users, Calendar, Clock, ClipboardList, Loader2, AlertCircle, RefreshCw, Plus, Minus, TrendingUp, Award, ShieldCheck, Heart, ShoppingBag, Truck, CheckCircle, XCircle, Package, LogOut } from 'lucide-react';
@@ -29,6 +29,7 @@ const AdminDashboard = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { token } = useSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -85,7 +86,10 @@ const AdminDashboard = () => {
     try {
       const response = await fetch(`${API_BASE_URL}/api/stats/update`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ field, action })
       });
       const data = await response.json();

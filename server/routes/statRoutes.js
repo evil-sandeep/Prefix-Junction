@@ -9,6 +9,16 @@ const restrictTo = require('../middleware/planMiddleware');
 router.get('/', statController.getStats);
 
 // POST /api/stats/update
-router.post('/update', protect, restrictTo('Elite'), statController.updateStat);
+// Allowing both Elite plan users and Admins to update stats
+router.post('/update', protect, (req, res, next) => {
+  if (req.user.role === 'admin' || req.user.plan === 'Elite') {
+    next();
+  } else {
+    res.status(403).json({
+      success: false,
+      message: 'You do not have permission to update statistics. This requires an Elite plan or Admin access.'
+    });
+  }
+}, statController.updateStat);
 
 module.exports = router;
