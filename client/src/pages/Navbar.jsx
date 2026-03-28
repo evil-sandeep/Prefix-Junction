@@ -61,10 +61,10 @@ function Navbar() {
           <nav className="hidden lg:flex items-center gap-8">
             <Link to="/" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">HOME</Link>
             <Link to="/services" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">SERVICES</Link>
-            <Link to="/products" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">OUR PRODUCTS</Link>
+            {/* <Link to="/products" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">OUR PRODUCTS</Link> */}
             <Link to="/booking" className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide">BOOKING</Link>
-            <Link 
-              to="/pricing" 
+            <Link
+              to="/pricing"
               className="text-sm font-semibold text-gray-800 hover:text-primary transition-colors tracking-wide"
               onClick={(e) => {
                 if (window.location.pathname === '/') {
@@ -88,13 +88,13 @@ function Navbar() {
                 </span>
               )}
             </Link>
-            
+
             {user ? (
               <div className="flex items-center gap-4">
                 <Link to="/dashboard" className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-slate-600 hover:bg-primary/10 hover:text-primary transition-all">
                   <User size={20} />
                 </Link>
-                <button 
+                <button
                   onClick={handleLogout}
                   className="hidden lg:flex items-center gap-2 text-xs font-black uppercase tracking-widest text-slate-400 hover:text-red-500 transition-all"
                 >
