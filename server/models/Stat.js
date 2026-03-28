@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const StatSchema = new mongoose.Schema({
   happyPets: {
     type: Number,
-    default: 500
+    default: 100
   },
   expertGroomers: {
     type: Number,
