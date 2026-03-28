@@ -31,10 +31,10 @@ const AboutBookingCTA = () => {
 
   const handleDownloadReceipt = () => {
     if (!status.bookingId || !status.bookingData) return;
-    
+
     const { name, email, phone, service, date, slot } = status.bookingData;
     const bookingId = status.bookingId;
-    
+
     const doc = new jsPDF();
 
     // Add Logo or Brand Name
@@ -138,7 +138,7 @@ const AboutBookingCTA = () => {
       if (data.success) {
         const newBookingId = data.booking.bookingId;
         const newBookingData = { ...formData };
-        
+
         setStatus({
           loading: false,
           success: true,
@@ -146,10 +146,10 @@ const AboutBookingCTA = () => {
           bookingId: newBookingId,
           bookingData: newBookingData
         });
-        
+
         // Send Email Confirmation
         sendEmailConfirmation(newBookingId, newBookingData);
-        
+
         // Reset form
         setFormData({
           name: '',
@@ -178,11 +178,11 @@ const AboutBookingCTA = () => {
     <section className="py-24 bg-white" id="booking">
       <div className="container mx-auto px-6">
         <div className="flex flex-col lg:flex-row gap-16 items-center">
-          
+
           {/* Booking Form Card (Left Side) */}
           <div className="w-full lg:w-[500px] bg-white rounded-[32px] shadow-[0_30px_80px_rgba(0,0,0,0.08)] p-12 border border-white">
             <h2 className="text-[32px] font-bold text-primary mb-10 tracking-tight">Book Your slot</h2>
-            
+
             {status.success ? (
               <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center animate-in fade-in zoom-in duration-300">
                 <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center text-white mx-auto mb-6">
@@ -194,16 +194,16 @@ const AboutBookingCTA = () => {
                   <span className="text-sm text-gray-400 block mb-1">Your Booking ID</span>
                   <span className="text-2xl font-black text-primary tracking-wider uppercase">{status.bookingId}</span>
                 </div>
-                
+
                 <div className="flex flex-col gap-4">
-                  <button 
+                  <button
                     onClick={handleDownloadReceipt}
                     className="w-full bg-primary hover:bg-[#00b875] text-white font-bold py-4 rounded-xl transition-all shadow-md flex items-center justify-center gap-2"
                   >
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
                     Download Receipt
                   </button>
-                  <button 
+                  <button
                     onClick={() => setStatus({ ...status, success: false })}
                     className="text-primary font-bold hover:underline"
                   >
@@ -220,40 +220,40 @@ const AboutBookingCTA = () => {
                   </div>
                 )}
                 <div>
-                  <input 
-                    type="text" 
+                  <input
+                    type="text"
                     name="name"
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="Your Name" 
+                    placeholder="Your Name"
                     className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
                   />
                 </div>
                 <div>
-                  <input 
-                    type="email" 
+                  <input
+                    type="email"
                     name="email"
                     required
                     value={formData.email}
                     onChange={handleChange}
-                    placeholder="Email Address" 
+                    placeholder="Email Address"
                     className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
                   />
                 </div>
                 <div>
-                  <input 
-                    type="tel" 
+                  <input
+                    type="tel"
                     name="phone"
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="Phone Number" 
+                    placeholder="Phone Number"
                     className="w-full px-6 py-4 rounded-xl border border-gray-100 bg-gray-50/50 focus:outline-none focus:ring-4 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all placeholder:text-gray-400 text-gray-700 font-medium"
                   />
                 </div>
                 <div className="relative group">
-                  <select 
+                  <select
                     name="service"
                     required
                     value={formData.service}
@@ -284,8 +284,8 @@ const AboutBookingCTA = () => {
                   </div>
                 </div>
                 <div className="relative">
-                  <input 
-                    type="date" 
+                  <input
+                    type="date"
                     name="date"
                     required
                     value={formData.date}
@@ -294,7 +294,7 @@ const AboutBookingCTA = () => {
                   />
                 </div>
                 <div className="relative group">
-                  <select 
+                  <select
                     name="slot"
                     required
                     value={formData.slot}
@@ -310,8 +310,8 @@ const AboutBookingCTA = () => {
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                   </div>
                 </div>
-                <button 
-                  type="submit" 
+                <button
+                  type="submit"
                   disabled={status.loading}
                   className="w-full bg-primary hover:bg-[#00b875] text-white font-bold py-5 rounded-xl transition-all shadow-[0_15px_30px_rgba(0,173,111,0.25)] hover:shadow-[0_20px_40px_rgba(0,173,111,0.3)] hover:-translate-y-1 active:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-3"
                 >
@@ -330,24 +330,24 @@ const AboutBookingCTA = () => {
           <div className="flex-1">
             <h2 className="text-[38px] font-bold text-primary mb-2 leading-none uppercase tracking-tight">About Us</h2>
             <h3 className="text-[30px] font-bold text-gray-900 mb-10 leading-tight">Petflix Grooming Services</h3>
-            
+
             <div className="space-y-8 text-[18px] text-gray-500 leading-relaxed font-normal">
               <p>
-                Founded on November 10, 2025, Petflix Junction – Pet Grooming Services has 
-                quickly established itself as a trusted and comprehensive pet care provider in 
-                Kendujhar. Our mission is to deliver top-quality grooming and wellness services 
+                Founded on April 19, 2026, Petflix Junction – Pet Grooming Services has
+                quickly established itself as a trusted and comprehensive pet care provider in
+                Kendujhar. Our mission is to deliver top-quality grooming and wellness services
                 that ensure every pet looks, feels, and lives their best.
               </p>
               <p>
-                We proudly offer doorstep grooming services across Kendujhar, along with a 
-                state-of-the-art Pet Grooming Salon located at Mandua, near Saras Road, 
-                Kendujhar. In addition to grooming, we regularly organize pet vaccination camps, 
-                and provide a wide range of pet essentials including premium pet food, grooming 
+                We proudly offer doorstep grooming services across Kendujhar, along with a
+                state-of-the-art Pet Grooming Salon located at Mandua, near Saras Road,
+                Kendujhar. In addition to grooming, we regularly organize pet vaccination camps,
+                and provide a wide range of pet essentials including premium pet food, grooming
                 accessories, toys, and treats — all available online.
               </p>
               <p>
-                Very soon, our offline store and full-service pet care center will also be launched 
-                to serve you even better. For now, all our services are conveniently available 
+                Very soon, our offline store and full-service pet care center will also be launched
+                to serve you even better. For now, all our services are conveniently available
                 online, ensuring your pets receive care at your doorstep with just a click!
               </p>
             </div>
@@ -355,13 +355,13 @@ const AboutBookingCTA = () => {
             {/* Checklist */}
             <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-y-7 gap-x-12">
               {[
-                "Expert Groomers", "Quality Products", 
-                "Affordable Prices", "Home Service", 
+                "Expert Groomers", "Quality Products",
+                "Affordable Prices", "Home Service",
                 "Safe & Hygienic", "Pet Friendly"
               ].map((item, index) => (
                 <div key={index} className="flex items-center gap-5 group">
                   <div className="w-7 h-7 flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
-                     <CheckCircle2 size={24} strokeWidth={3} />
+                    <CheckCircle2 size={24} strokeWidth={3} />
                   </div>
                   <span className="font-bold text-[20px] text-gray-800 tracking-tight">{item}</span>
                 </div>
