@@ -72,10 +72,13 @@ const CheckoutRouter = () => {
   return selectedPlan ? <SubscriptionCheckout /> : <Address />;
 };
 
+import ScrollToTop from './components/ScrollToTop';
+
 function App() {
   console.log('App is rendering');
   return (
     <Router>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
