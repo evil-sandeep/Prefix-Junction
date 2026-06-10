@@ -10,6 +10,7 @@ import { OurServicesSection } from './OurServices';
 import { HolisticCareSection } from './HolisticCare';
 import GlimpseOfOurSalon from './GlimpseOfOurSalon';
 import BeforeAndAfter from './BeforeAndAfter';
+import OurHappyPets from './OurHappyPets';
 import OurWork from './OurWork';
 import ClientsReview from './ClientsReview';
 import ContactUs from './ContactUs';
@@ -52,6 +53,7 @@ function Home() {
       <HolisticCareSection />
       <GlimpseOfOurSalon />
       <BeforeAndAfter />
+      <OurHappyPets />
       <OurWork />
       <PricingSection />
       <ClientsReview />
